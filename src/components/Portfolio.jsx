@@ -9,7 +9,6 @@ const Portfolio = () => {
   
   return (
     <div className="min-h-screen bg-black font-sans">
-      {/* Border wrapper */}
       <div className="min-h-screen border border-gray-600 m-4">
         <style jsx>{`
           .bg-noise {
@@ -21,15 +20,13 @@ const Portfolio = () => {
           }
         `}</style>
         
-        {/* Only show sidebar when not on projects page */}
-        {activeItem !== 'projects' && (
-          <Sidebar 
-            profile={portfolioData.profile}
-            navigation={portfolioData.navigation}
-            activeItem={activeItem}
-            onNavigationClick={handleNavigationClick}
-          />
-        )}
+        {/* Always show sidebar */}
+        <Sidebar 
+          profile={portfolioData.profile}
+          navigation={portfolioData.navigation}
+          activeItem={activeItem}
+          onNavigationClick={handleNavigationClick}
+        />
         
         <MainContent 
           activeItem={activeItem}
