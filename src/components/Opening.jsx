@@ -22,7 +22,7 @@ const OpeningPage = ({ onComplete }) => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        backgroundColor: '#111111', // Slightly grayish black to match portfolio
+        backgroundColor: '#000000',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -114,30 +114,28 @@ const OpeningPage = ({ onComplete }) => {
         .spark:nth-child(8) { top: 70%; right: 30%; animation-delay: 0.8s; }
       `}</style>
 
-      {/* Animated background */}
-      <div style={{
+   <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'linear-gradient(to bottom right, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2))'
+        background: 'linear-gradient(to bottom right, rgba(147, 51, 234, 0), rgba(59, 130, 246, 0.1))'
       }} />
       
-      {/* Noise texture */}
       <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        opacity: 0.1,
+        opacity: 0.05,
         backgroundImage: `
-          radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
-          radial-gradient(circle at 70% 50%, white 1px, transparent 1px)
+          radial-gradient(circle at 25% 25%, white 1px, transparent 1px),
+          radial-gradient(circle at 75% 75%, white 1px, transparent 1px)
         `,
-        backgroundSize: '3px 3px, 5px 5px',
-        backgroundPosition: '0 0, 2px 2px'
+        backgroundSize: '4px 4px, 6px 6px',
+        backgroundPosition: '0 0, 3px 3px'
       }} />
       
       {/* Content */}
@@ -152,7 +150,8 @@ const OpeningPage = ({ onComplete }) => {
             letterSpacing: '0.1em',
             margin: 0,
             padding: 0,
-            textAlign: 'center'
+            textAlign: 'center',
+            textShadow: '0 0 20px rgba(255, 255, 255, 0.3)'
           }}
         >
           <span className={isDisintegrating ? 'electric-flicker' : ''}>

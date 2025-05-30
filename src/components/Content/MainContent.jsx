@@ -23,18 +23,6 @@ const MainContent = ({
     </article>
   );
 
-  // FAQ item component
-  const FAQItem = ({ faq }) => (
-    <article className="mb-12">
-      <h3 className="text-lg md:text-xl font-light text-white mb-4 leading-relaxed">
-        {faq.question}
-      </h3>
-      <div className="text-sm text-gray-300 font-light leading-relaxed max-w-2xl">
-        {faq.answer}
-      </div>
-    </article>
-  );
-
   // Right Content Container
   const RightContentContainer = ({ children, className = "" }) => (
     <div className={`min-h-screen flex ${className}`}>
@@ -84,7 +72,7 @@ const MainContent = ({
           <div>
             <h3 className="text-white mb-2">Email</h3>
             <a 
-              href="mailto:russelrojo@example.com" 
+              href="mailto:rojorusselgem@gmail.com" 
               className="text-gray-300 hover:text-white hover:translate-x-2 transition-all duration-200 inline-block"
             >
               rojorusselgem@gmail.com
@@ -128,7 +116,7 @@ const MainContent = ({
     </RightContentContainer>
   );
 
-  // Projects page layout - now consistent with other pages
+  // Projects page layout
   const ProjectsPage = () => (
     <div className="px-16 py-20">
       <header className="mb-12">
@@ -153,40 +141,16 @@ const MainContent = ({
         return <HomePage />;
       case 'projects':
         return <ProjectsPage />;
-      case 'faq':
-        return (
-          <div className="px-16 py-20">
-            <section aria-label="Frequently Asked Questions">
-              {faqData.map((faq) => (
-                <FAQItem key={faq.id} faq={faq} />
-              ))}
-            </section>
-          </div>
-        );
-      case 'info':
-        return (
-          <div className="px-16 py-20">
-            <h2 className="text-4xl font-light text-white mb-8">Info</h2>
-            <p className="text-gray-300">Information page content goes here.</p>
-          </div>
-        );
       case 'contact':
         return <ContactPage />;
-      case 'copycats':
-        return (
-          <div className="px-16 py-20">
-            <h2 className="text-4xl font-light text-white mb-8">Copycats</h2>
-            <p className="text-gray-300">Copycats information goes here.</p>
-          </div>
-        );
       default:
         return <HomePage />;
     }
   };
 
-  // Consistent layout for all pages - removed special case for projects
+  // Updated layout - removed ml-64 since navigation is now independent
   return (
-    <main className="ml-64 min-h-screen">
+    <main className="min-h-screen pl-64">
       {/* Noise texture overlay */}
       <div className="fixed inset-0 opacity-20 pointer-events-none bg-noise" />
       

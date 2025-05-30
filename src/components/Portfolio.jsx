@@ -4,6 +4,7 @@ import { useNavigation } from '../hooks/useNavigation';
 import Sidebar from './SideBar/Sidebar';
 import MainContent from './Content/MainContent';
 import OpeningPage from './Opening';
+
 const Portfolio = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { activeItem, handleNavigationClick } = useNavigation();
@@ -36,7 +37,7 @@ const Portfolio = () => {
       {isLoading ? (
         <OpeningPage onComplete={handleLoadingComplete} />
       ) : (
-        <div className="min-h-screen border border-gray-600 m-4 portfolio-enter">
+        <div className="min-h-screen portfolio-enter">
           {/* Always show sidebar */}
           <Sidebar 
             profile={portfolioData.profile}
