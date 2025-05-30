@@ -5,7 +5,6 @@ export const useNavigation = (initialItem = 'home') => {
   
   const handleNavigationClick = (itemId) => {
     setActiveItem(itemId);
-    // Add routing logic here if using React Router
     console.log(`Navigating to: ${itemId}`);
   };
   

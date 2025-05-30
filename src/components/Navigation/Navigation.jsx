@@ -6,7 +6,7 @@ const Navigation = ({ items, activeItem, onItemClick }) => (
       <button
         key={item.id}
         onClick={() => onItemClick(item.id)}
-        style={{display: 'inline-block', textAlign: 'left', padding: '4px 0'}}
+        style={{display: 'inline-block', textAlign: 'left', padding: '8px 12px', width: 'fit-content'}}
         className={`text-sm font-light tracking-wide transition-colors duration-200 hover:scale-105 ${
           activeItem === item.id 
             ? 'text-white' 
