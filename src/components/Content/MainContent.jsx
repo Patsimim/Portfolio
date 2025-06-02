@@ -11,6 +11,12 @@ const MainContent = ({
   onNavigationClick 
 }) => {
   
+  // Get current page title
+  const getCurrentPageTitle = () => {
+    const currentNav = navigation.find(nav => nav.id === activeItem);
+    return currentNav ? currentNav.label : 'Home';
+  };
+
   // Simple project card component for projects page
   const SimpleProjectCard = ({ project, index }) => (
     <article className="mb-12 cursor-pointer hover:translate-x-2 transition-transform duration-200">
@@ -148,11 +154,17 @@ const MainContent = ({
     }
   };
 
-  // Updated layout - removed ml-64 since navigation is now independent
   return (
-    <main className="min-h-screen pl-64">
+    <main className="min-h-screen pl-64 relative">
       {/* Noise texture overlay */}
       <div className="fixed inset-0 opacity-20 pointer-events-none bg-noise" />
+      
+      {/* Page title on the right side - like Keita Yamada's design */}
+      <div className="fixed right-8 top-8 text-right z-20">
+        <h3 className="text-lg font-light text-white tracking-wide">
+          {getCurrentPageTitle()}
+        </h3>
+      </div>
       
       <div className="relative z-1">
         {renderContent()}
