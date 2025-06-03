@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProjectCard from '../ProjectCard/ProjectCard';
+import { techStacks } from '../../data/techStacks';
 
 const MainContent = ({ 
   activeItem, 
@@ -11,6 +12,26 @@ const MainContent = ({
   onNavigationClick 
 }) => {
   
+  // State for current tech stack index
+  const [currentStackIndex, setCurrentStackIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Auto-rotate tech stacks every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      
+      setTimeout(() => {
+        setCurrentStackIndex((prevIndex) => 
+          prevIndex === techStacks.length - 1 ? 0 : prevIndex + 1
+        );
+        setIsTransitioning(false);
+      }, 1200); // Match the slower exit transition duration
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Get current page title
   const getCurrentPageTitle = () => {
     const currentNav = navigation.find(nav => nav.id === activeItem);
@@ -45,13 +66,31 @@ const MainContent = ({
         </div>
 
         <div style={styles.expertiseSection}>
-          <h3 style={styles.expertiseTitle}>Expertise</h3>
-          <ul style={styles.expertiseList}>
-            <li style={styles.expertiseItem}>Frontend: React, Next.js, TypeScript</li>
-            <li style={styles.expertiseItem}>Backend: Node.js, Express, FastAPI</li>
-            <li style={styles.expertiseItem}>Database: PostgreSQL, MongoDB</li>
-            <li style={styles.expertiseItem}>Cloud: AWS, Vercel, Docker</li>
-          </ul>
+          <div style={styles.techStackContainer}>
+            <div style={styles.techStackWrapper}>
+              {techStacks[currentStackIndex].techs.map((tech, index) => (
+                <div key={`${tech.name}-${currentStackIndex}`} style={{
+                  ...styles.techItem,
+                  animationDelay: isTransitioning ? `${index * 0.1}s` : `${index * 0.15}s`,
+                  animation: isTransitioning 
+                    ? `slideOutToRight 1.2s ease forwards` 
+                    : `slideInFromLeft 0.8s ease forwards`,
+                  animationFillMode: 'forwards'
+                }}>
+                  <img 
+                    src={tech.image} 
+                    alt={tech.name}
+                    style={styles.techImage}
+                    onError={(e) => {
+                      // Fallback if image fails to load
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                  <span style={styles.techName}>{tech.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -242,21 +281,45 @@ const styles = {
   },
   expertiseTitle: {
     color: '#ffffff',
-    marginBottom: '8px',
+    marginBottom: '16px',
     fontSize: '16px',
-    fontWeight: '400'
+    fontWeight: '400',
+    transition: 'all 0.3s ease'
   },
-  expertiseList: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
+  techStackContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '16px',
+    minHeight: '150px',
+    overflow: 'hidden'
+  },
+  techStackWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '48px',
+    width: '100%'
+  },
+  techItem: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px'
+    alignItems: 'center',
+    gap: '12px',
+    opacity: 1
   },
-  expertiseItem: {
+  techImage: {
+    width: '96px',
+    height: '96px',
+    objectFit: 'contain',
+    filter: 'brightness(0.9)',
+    transition: 'all 0.3s ease'
+  },
+  techName: {
     color: '#9ca3af',
-    fontSize: '14px'
+    fontSize: '14px',
+    fontWeight: '300',
+    textAlign: 'center'
   },
   // Contact Page Styles
   contactContainer: {
@@ -316,5 +379,43 @@ const styles = {
     fontSize: '18px'
   }
 };
+
+// Add CSS animation for smooth left-to-right transition
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+  @keyframes slideInFromLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideOutToRight {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(60px);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+document.head.appendChild(styleSheet);
 
 export default MainContent;
