@@ -1,44 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const ProjectCard = ({ project, index }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
   return (
-    <article
+    <article 
       style={styles.article}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          console.log(`Selected project: ${project.title}`);
-        }
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateX(-8px)';
+        e.currentTarget.querySelector('h3').style.color = '#d1d5db';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateX(0)';
+        e.currentTarget.querySelector('h3').style.color = '#ffffff';
       }}
     >
-      <div style={styles.container}>
-        <h2 style={{
-          ...styles.title,
-          ...(isHovered ? styles.titleHovered : {})
-        }}>
+      <div style={{ textAlign: 'right' }}>
+        <h3 style={styles.title}>
           {project.title}
-        </h2>
-        
-        <div style={{
-          ...styles.metaContainer,
-          ...(isHovered ? styles.metaContainerHovered : {})
-        }}>
-          <div style={styles.metaText}>
-            <time dateTime={project.date}>{project.date}</time> / {project.category}
-            {project.designer && `: ${project.designer}`}
-          </div>
+        </h3>
+        <div style={styles.meta}>
+          {project.date} / {project.category}: {project.designer}
         </div>
-        
-        {/* Hover effect line */}
-        <div style={{
-          ...styles.hoverLine,
-          ...(isHovered ? styles.hoverLineVisible : styles.hoverLineHidden)
-        }} />
       </div>
     </article>
   );
@@ -46,58 +27,27 @@ const ProjectCard = ({ project, index }) => {
 
 const styles = {
   article: {
+    marginBottom: '48px',
     cursor: 'pointer',
-    marginBottom: '64px',
-    transition: 'all 0.5s ease-out',
+    transition: 'transform 0.2s ease',
     display: 'flex',
-    justifyContent: 'flex-end'
-  },
-  container: {
-    position: 'relative',
+    justifyContent: 'flex-end',
     textAlign: 'right'
   },
   title: {
-    fontSize: 'clamp(48px, 8vw, 144px)',
-    fontWeight: '100',
-    letterSpacing: '-0.025em',
+    fontSize: 'clamp(48px, 8vw, 100px)',
+    fontWeight: '300',
     color: '#ffffff',
-    transition: 'all 0.3s ease',
+    marginBottom: '8px',
+    letterSpacing: '0.025em',
+    transition: 'color 0.3s ease',
     margin: 0
   },
-  titleHovered: {
-    transform: 'translateX(-16px)'
-  },
-  metaContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    marginTop: '16px',
-    textAlign: 'left',
-    transition: 'all 0.3s ease'
-  },
-  metaContainerHovered: {
-    transform: 'translateX(-8px)'
-  },
-  metaText: {
-    fontSize: '12px',
+  meta: {
+    fontSize: '14px',
     color: '#9ca3af',
     fontWeight: '300'
-  },
-  hoverLine: {
-    position: 'absolute',
-    right: 0,
-    top: '50%',
-    height: '1px',
-    backgroundColor: '#ffffff',
-    transition: 'all 0.3s ease'
-  },
-  hoverLineVisible: {
-    width: '48px',
-    opacity: 1
-  },
-  hoverLineHidden: {
-    width: 0,
-    opacity: 0
   }
 };
+
 export default ProjectCard;

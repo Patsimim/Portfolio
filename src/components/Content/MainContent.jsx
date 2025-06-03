@@ -17,30 +17,6 @@ const MainContent = ({
     return currentNav ? currentNav.label : 'Home';
   };
 
-  // Simple project card component for projects page
-  const SimpleProjectCard = ({ project, index }) => (
-    <article 
-      style={styles.simpleProjectCard}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateX(-8px)';
-        e.currentTarget.querySelector('h3').style.color = '#d1d5db';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateX(0)';
-        e.currentTarget.querySelector('h3').style.color = '#ffffff';
-      }}
-    >
-      <div style={{ textAlign: 'right' }}>
-        <h3 style={styles.simpleProjectTitle}>
-          {project.title}
-        </h3>
-        <div style={styles.simpleProjectMeta}>
-          {project.date} / {project.category}: {project.designer}
-        </div>
-      </div>
-    </article>
-  );
-
   // Right Content Container
   const RightContentContainer = ({ children, className = "" }) => (
     <div style={styles.rightContentContainer}>
@@ -170,7 +146,7 @@ const MainContent = ({
     <div style={styles.projectsPage}>
       <section aria-label="All projects">
         {(projects || []).map((project, index) => (
-          <SimpleProjectCard key={project.id || index} project={project} index={index} />
+          <ProjectCard key={project.id || index} project={project} index={index} />
         ))}
         
         {(!projects || projects.length === 0) && (
@@ -211,57 +187,9 @@ const styles = {
     paddingLeft: '256px',
     position: 'relative'
   },
-  // noiseOverlay: {
-  //   position: 'fixed',
-  //   inset: 0,
-  //   opacity: 0.2,
-  //   pointerEvents: 'none',
-  //   backgroundImage: `
-  //     radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
-  //     radial-gradient(circle at 70% 50%, white 1px, transparent 1px)
-  //   `,
-  //   backgroundSize: '3px 3px, 5px 5px',
-  //   backgroundPosition: '0 0, 2px 2px'
-  // },
-  pageTitle: {
-    position: 'fixed',
-    right: '32px',
-    top: '32px',
-    textAlign: 'right',
-    zIndex: 20
-  },
-  pageTitleText: {
-    fontSize: '18px',
-    fontWeight: '300',
-    color: '#ffffff',
-    letterSpacing: '0.025em'
-  },
   contentContainer: {
     position: 'relative',
     zIndex: 1
-  },
-  // Simple Project Card Styles
-  simpleProjectCard: {
-    marginBottom: '48px',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    textAlign: 'right'
-  },
-  simpleProjectTitle: {
-    fontSize: 'clamp(24px, 4vw, 32px)',
-    fontWeight: '300',
-    color: '#ffffff',
-    marginBottom: '8px',
-    letterSpacing: '0.025em',
-    transition: 'color 0.3s ease',
-    margin: 0
-  },
-  simpleProjectMeta: {
-    fontSize: '14px',
-    color: '#9ca3af',
-    fontWeight: '300'
   },
   // Right Content Container Styles
   rightContentContainer: {
