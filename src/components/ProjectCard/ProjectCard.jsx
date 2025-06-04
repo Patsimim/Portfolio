@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobe, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faApple, faAndroid } from '@fortawesome/free-brands-svg-icons';
 
 const ProjectCard = ({ project, index }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +24,20 @@ const ProjectCard = ({ project, index }) => {
     setIsHovered(false);
   };
 
+  // Helper function to get platform icons
+  const getPlatformIcon = (platform) => {
+    switch (platform.toLowerCase()) {
+      case 'android':
+        return <FontAwesomeIcon icon={faAndroid} />;
+      case 'ios':
+        return <FontAwesomeIcon icon={faApple} />;
+      case 'web':
+        return <FontAwesomeIcon icon={faGlobe} />;
+      default:
+        return <FontAwesomeIcon icon={faLink} />;
+    }
+  };
+
   return (
     <>
       <article 
@@ -32,15 +49,17 @@ const ProjectCard = ({ project, index }) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div style={{ textAlign: 'right' }}>
-          <h3 style={{
-            ...styles.title,
-            color: isHovered ? '#d1d5db' : '#ffffff'
-          }}>
-            {project.title}
-          </h3>
-          <div style={styles.meta}>
-            {project.date} / {project.category}: {project.designer}
+        <div style={styles.projectContent}>
+          <div style={styles.projectInfo}>
+            <h3 style={{
+              ...styles.title,
+              color: isHovered ? '#d1d5db' : '#ffffff'
+            }}>
+              {project.title}
+            </h3>
+            <div style={styles.meta}>
+              {project.date} / {project.category}
+            </div>
           </div>
         </div>
       </article>
@@ -66,11 +85,19 @@ const ProjectCard = ({ project, index }) => {
             <div style={styles.modalContent}>
               <h2 style={styles.modalTitle}>{project.title}</h2>
               
-              <div style={styles.modalMeta}>
-                <p style={styles.metaText}><strong>Date:</strong> {project.date}</p>
-                <p style={styles.metaText}><strong>Role:</strong> {project.category}</p>
-                <p style={styles.metaText}><strong>Developer:</strong> {project.designer}</p>
-              </div>
+              {/* Project Image instead of meta info */}
+              {project.image && (
+                <div style={styles.modalImageContainer}>
+                  <img 
+                    src={project.image} 
+                    alt={`${project.title} screenshot`}
+                    style={styles.modalImage}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
               
               <div style={styles.modalDescription}>
                 <h3 style={styles.sectionTitle}>Project Description</h3>
@@ -88,21 +115,33 @@ const ProjectCard = ({ project, index }) => {
                 </div>
               </div>
               
-              <div style={styles.modalActions}>
-                <a 
-                  href={project.liveUrl || "#"} 
-                  style={{
-                    ...styles.actionButton,
-                    backgroundColor: hoveredButton === 'live' ? '#555' : '#333'
-                  }}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  onMouseEnter={() => setHoveredButton('live')}
-                  onMouseLeave={() => setHoveredButton(null)}
-                >
-                  View Live ↗
-                </a>
-              </div>
+              {/* View Live Links */}
+              {project.viewLive && project.viewLive.length > 0 && (
+                <div style={styles.modalActions}>
+                  <h3 style={styles.sectionTitle}>View Live</h3>
+                  <div style={styles.viewLiveContainer}>
+                    {project.viewLive.map((link, index) => (
+                      <a 
+                        key={index}
+                        href={link.url} 
+                        style={{
+                          ...styles.actionButton,
+                          backgroundColor: hoveredButton === `live-${index}` ? '#555' : '#333'
+                        }}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onMouseEnter={() => setHoveredButton(`live-${index}`)}
+                        onMouseLeave={() => setHoveredButton(null)}
+                      >
+                        <span style={styles.platformIcon}>
+                          {getPlatformIcon(link.platform)}
+                        </span>
+                        {link.label} ↗
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -119,6 +158,27 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
     textAlign: 'right'
+  },
+  projectContent: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '24px',
+    width: '100%',
+    justifyContent: 'flex-end'
+  },
+  projectInfo: {
+    textAlign: 'right'
+  },
+  logoContainer: {
+    flexShrink: 0
+  },
+  projectLogo: {
+    width: '60px',
+    height: '60px',
+    borderRadius: '12px',
+    objectFit: 'cover',
+    border: '2px solid #333',
+    transition: 'border-color 0.3s ease'
   },
   title: {
     fontSize: 'clamp(20px, 8vw, 60px)',
@@ -151,7 +211,7 @@ const styles = {
   modalCard: {
     backgroundColor: '#1a1a1a',
     borderRadius: '12px',
-    maxWidth: '400px',
+    maxWidth: '500px',
     width: '100%',
     maxHeight: '80vh',
     overflowY: 'auto',
@@ -174,6 +234,19 @@ const styles = {
   modalContent: {
     padding: '32px'
   },
+  modalImageContainer: {
+    marginBottom: '32px',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    border: '1px solid #333'
+  },
+  modalImage: {
+    width: '100%',
+    height: 'auto',
+    maxHeight: '300px',
+    objectFit: 'cover',
+    display: 'block'
+  },
   modalTitle: {
     fontSize: '32px',
     fontWeight: '300',
@@ -194,7 +267,16 @@ const styles = {
     margin: '0 0 8px 0',
     fontSize: '14px'
   },
-
+  sectionTitle: {
+    fontSize: '18px',
+    fontWeight: '500',
+    color: '#ffffff',
+    marginBottom: '16px',
+    margin: '0 0 16px 0'
+  },
+  modalDescription: {
+    marginBottom: '32px'
+  },
   descriptionText: {
     fontSize: '16px',
     color: '#d1d5db',
@@ -216,20 +298,30 @@ const styles = {
     fontWeight: '500'
   },
   modalActions: {
-    display: 'flex',
-    gap: '16px',
     paddingTop: '24px',
     borderTop: '1px solid #333'
   },
+  viewLiveContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px'
+  },
   actionButton: {
-    padding: '12px 24px',
+    padding: '12px 16px',
     color: '#ffffff',
     textDecoration: 'none',
     borderRadius: '6px',
     fontSize: '14px',
     fontWeight: '500',
     transition: 'background-color 0.2s ease',
-    display: 'inline-block'
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    justifyContent: 'center'
+  },
+  platformIcon: {
+    fontSize: '16px',
+    minWidth: '20px'
   }
 };
 
