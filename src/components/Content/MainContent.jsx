@@ -260,7 +260,7 @@ const styles = {
     textAlign: 'center'
   },
   homeTitle: {
-    fontSize: 'clamp(48px, 8vw, 112px)',
+    fontSize: 'clamp(38px, 8vw, 90px)',
     fontWeight: '100',
     color: '#ffffff',
     marginBottom: '48px',
@@ -271,7 +271,7 @@ const styles = {
     marginBottom: '32px'
   },
   homeParagraph: {
-    fontSize: 'clamp(18px, 2vw, 20px)',
+    fontSize: 'clamp(16px, 2vw, 18px)',
     fontWeight: '300',
     lineHeight: '1.6',
     color: '#d1d5db'

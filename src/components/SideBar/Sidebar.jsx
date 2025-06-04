@@ -70,7 +70,7 @@ const styles = {
     left: 0,
     top: 0,
     height: '100vh',
-    width: '600px',
+    width: '420px',
     backgroundColor: '#000000',
     padding: '32px',
     display: 'flex',
@@ -81,7 +81,7 @@ const styles = {
     marginBottom: '48px'
   },
   title: {
-    fontSize: '60px',
+    fontSize: '40px',
     fontWeight: '300',
     color: '#ffffff',
     marginBottom: '8px',
@@ -89,7 +89,7 @@ const styles = {
     margin: 0
   },
   subtitle: {
-    fontSize: '34px',
+    fontSize: '20px',
     color: '#9ca3af',
     fontWeight: '300',
     margin: 0
