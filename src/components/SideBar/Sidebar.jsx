@@ -193,8 +193,8 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
             >
               {/* Mobile Header */}
               <div style={styles.mobileMenuHeader}>
-                <h1 style={styles.title}>{profile.name}</h1>
-                <p style={styles.subtitle}>{profile.title}</p>
+                <h1 style={styles.mobileTitle}>{profile.name}</h1>
+                <p style={styles.mobileSubtitle}>{profile.title}</p>
               </div>
 
               {/* Navigation */}
@@ -336,27 +336,27 @@ const styles = {
     zIndex: 20,
     display: 'flex',
     alignItems: 'center',
-    pointerEvents: 'none'
+    pointerEvents: 'none' 
   },
   mobileHeaderContent: {
     display: 'flex',
-    justifyContent: 'flex-end', 
+    justifyContent: 'flex-end',
     alignItems: 'center',
     width: '100%',
     padding: '0 20px'
   },
   hamburger: {
-    background: 'rgba(0, 0, 0, 0.8)',
+    background: 'rgba(0, 0, 0, 0.8)', 
     border: 'none',
     cursor: 'pointer',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
-    width: '48px', 
+    width: '48px',
     height: '48px',
     padding: '12px',
     borderRadius: '8px',
-    pointerEvents: 'auto', 
+    pointerEvents: 'auto',
     backdropFilter: 'blur(8px)'
   },
   hamburgerLine: {
@@ -373,13 +373,13 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     zIndex: 15,
     backdropFilter: 'blur(2px)' 
   },
   mobileSidebar: {
     position: 'fixed',
-    left: 0, 
+    left: 0,
     top: 0,
     height: '100vh',
     width: '280px',
@@ -394,6 +394,20 @@ const styles = {
   mobileMenuHeader: {
     marginBottom: '40px',
     paddingTop: '20px'
+  },
+  mobileTitle: {
+    fontSize: '26px', 
+    fontWeight: '300',
+    color: '#ffffff',
+    marginBottom: '8px',
+    letterSpacing: '0.025em',
+    margin: 0
+  },
+  mobileSubtitle: {
+    fontSize: '16px',
+    color: '#9ca3af',
+    fontWeight: '300',
+    margin: 0
   },
   mobileFooter: {
     fontSize: '14px',
@@ -416,26 +430,26 @@ const styles = {
     width: '100%'
   },
   navButtonContentDesktop: {
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
     gap: 0,
     width: '100%'
   },
   navButtonDesktop: {
-    width: '100%', 
-    height: '64px', 
+    width: '100%',
+    height: '64px',
     borderRadius: '12px',
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
     alignItems: 'center',
     display: 'flex',
-    padding: '8px 16px', 
-    transition: 'all 0.2s ease', 
-    textAlign: 'left' 
+    padding: '8px 16px',
+    transition: 'all 0.2s ease',
+    textAlign: 'left'
   },
   iconContainer: {
     display: 'inline-flex',
     alignItems: 'center',
-    minWidth: '24px', 
-    height: '24px', 
+    minWidth: '24px',
+    height: '24px',
     justifyContent: 'center',
     cursor: 'pointer',
     transition: 'transform 0.2s ease'
@@ -447,8 +461,8 @@ const styles = {
   },
   navIconDesktop: {
     fontSize: '20px',
-    width: '20px', 
-    height: '20px', 
+    width: '20px',
+    height: '20px',
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -459,7 +473,7 @@ const styles = {
     minWidth: '32px'
   },
   navTextDesktop: {
-    fontSize: '24px', 
+    fontSize: '24px',
     fontWeight: '400',
     letterSpacing: '0.025em',
     animation: 'fadeInText 0.3s ease-in-out'
