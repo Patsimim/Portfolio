@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import ProjectCard from '../ProjectCard/ProjectCard';
-import { techStacks } from '../../data/techStacks';
+import React, { useState, useEffect } from "react";
+import ProjectCard from "../ProjectCard/ProjectCard";
+import { techStacks } from "../../data/techStacks";
 
-const MainContent = ({ 
-  activeItem, 
-  projects, 
-  simpleProjects, 
-  faqData, 
-  profile, 
-  navigation, 
-  onNavigationClick 
+const MainContent = ({
+  activeItem,
+  projects,
+  simpleProjects,
+  faqData,
+  profile,
+  navigation,
+  onNavigationClick,
 }) => {
-  
   // State for current tech stack index
   const [currentStackIndex, setCurrentStackIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -24,17 +23,17 @@ const MainContent = ({
     };
 
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // Auto-rotate tech stacks every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setIsTransitioning(true);
-      
+
       setTimeout(() => {
-        setCurrentStackIndex((prevIndex) => 
+        setCurrentStackIndex((prevIndex) =>
           prevIndex === techStacks.length - 1 ? 0 : prevIndex + 1
         );
         setIsTransitioning(false);
@@ -46,24 +45,28 @@ const MainContent = ({
 
   // Get current page title
   const getCurrentPageTitle = () => {
-    const currentNav = navigation.find(nav => nav.id === activeItem);
-    return currentNav ? currentNav.label : 'Home';
+    const currentNav = navigation.find((nav) => nav.id === activeItem);
+    return currentNav ? currentNav.label : "Home";
   };
 
   // Right Content Container
   const RightContentContainer = ({ children, className = "" }) => (
-    <div style={{
-      ...styles.rightContentContainer,
-      ...(isMobile ? styles.rightContentContainerMobile : {})
-    }}>
+    <div
+      style={{
+        ...styles.rightContentContainer,
+        ...(isMobile ? styles.rightContentContainerMobile : {}),
+      }}
+    >
       {/* Left side - empty space (only on desktop) */}
       {!isMobile && <div style={styles.rightContentSpacer}></div>}
-      
+
       {/* Right side - content */}
-      <div style={{
-        ...styles.rightContentMain,
-        ...(isMobile ? styles.rightContentMainMobile : {})
-      }}>
+      <div
+        style={{
+          ...styles.rightContentMain,
+          ...(isMobile ? styles.rightContentMainMobile : {}),
+        }}
+      >
         {children}
       </div>
     </div>
@@ -71,65 +74,90 @@ const MainContent = ({
 
   // Home page - About me summary
   const HomePage = () => (
-    <div style={{
-      ...styles.homePage,
-      ...(isMobile ? styles.homePageMobile : {})
-    }}>
-      <div style={{
-        ...styles.homeContent,
-        ...(isMobile ? styles.homeContentMobile : {})
-      }}>
-        <h2 style={{
-          ...styles.homeTitle,
-          ...(isMobile ? styles.homeTitleMobile : {})
-        }}>
+    <div
+      style={{
+        ...styles.homePage,
+        ...(isMobile ? styles.homePageMobile : {}),
+      }}
+    >
+      <div
+        style={{
+          ...styles.homeContent,
+          ...(isMobile ? styles.homeContentMobile : {}),
+        }}
+      >
+        <h2
+          style={{
+            ...styles.homeTitle,
+            ...(isMobile ? styles.homeTitleMobile : {}),
+          }}
+        >
           About Me
         </h2>
-        
+
         <div style={styles.homeText}>
-          <p style={{
-            ...styles.homeParagraph,
-            ...(isMobile ? styles.homeParagraphMobile : {})
-          }}>
-            Fullstack developer crafting digital experiences with clean code and elegant design.
+          <p
+            style={{
+              ...styles.homeParagraph,
+              ...(isMobile ? styles.homeParagraphMobile : {}),
+            }}
+          >
+            I’m a Computer Engineering graduate from Silliman University and a
+            Fullstack Developer willing to serve with dedication to the assigned
+            work. Possessing good work ethics, character and very flexible.
+            Looking to join where the opportunity for growth and personal
+            development is embraced.
           </p>
         </div>
 
         <div style={styles.expertiseSection}>
-          <div style={{
-            ...styles.techStackContainer,
-            ...(isMobile ? styles.techStackContainerMobile : {})
-          }}>
-            <div style={{
-              ...styles.techStackWrapper,
-              ...(isMobile ? styles.techStackWrapperMobile : {})
-            }}>
+          <div
+            style={{
+              ...styles.techStackContainer,
+              ...(isMobile ? styles.techStackContainerMobile : {}),
+            }}
+          >
+            <div
+              style={{
+                ...styles.techStackWrapper,
+                ...(isMobile ? styles.techStackWrapperMobile : {}),
+              }}
+            >
               {techStacks[currentStackIndex].techs.map((tech, index) => (
-                <div key={`${tech.name}-${currentStackIndex}`} style={{
-                  ...styles.techItem,
-                  ...(isMobile ? styles.techItemMobile : {}),
-                  animationDelay: isTransitioning ? `${index * 0.1}s` : `${index * 0.15}s`,
-                  animation: isTransitioning 
-                    ? `slideOutToRight 1.2s ease forwards` 
-                    : `slideInFromLeft 0.8s ease forwards`,
-                  animationFillMode: 'forwards'
-                }}>
-                  <img 
-                    src={tech.image} 
+                <div
+                  key={`${tech.name}-${currentStackIndex}`}
+                  style={{
+                    ...styles.techItem,
+                    ...(isMobile ? styles.techItemMobile : {}),
+                    animationDelay: isTransitioning
+                      ? `${index * 0.1}s`
+                      : `${index * 0.15}s`,
+                    animation: isTransitioning
+                      ? `slideOutToRight 1.2s ease forwards`
+                      : `slideInFromLeft 0.8s ease forwards`,
+                    animationFillMode: "forwards",
+                  }}
+                >
+                  <img
+                    src={tech.image}
                     alt={tech.name}
                     style={{
                       ...styles.techImage,
-                      ...(isMobile ? styles.techImageMobile : {})
+                      ...(isMobile ? styles.techImageMobile : {}),
                     }}
                     onError={(e) => {
                       // Fallback if image fails to load
-                      e.target.style.display = 'none';
+                      e.target.style.display = "none";
                     }}
                   />
-                  <span style={{
-                    ...styles.techName,
-                    ...(isMobile ? styles.techNameMobile : {})
-                  }}>{tech.name}</span>
+                  <span
+                    style={{
+                      ...styles.techName,
+                      ...(isMobile ? styles.techNameMobile : {}),
+                    }}
+                  >
+                    {tech.name}
+                  </span>
                 </div>
               ))}
             </div>
@@ -143,107 +171,125 @@ const MainContent = ({
   const ContactPage = () => (
     <RightContentContainer>
       <div style={styles.contactContainer}>
-        <div style={{
-          ...styles.contactSections,
-          ...(isMobile ? styles.contactSectionsMobile : {})
-        }}>
+        <div
+          style={{
+            ...styles.contactSections,
+            ...(isMobile ? styles.contactSectionsMobile : {}),
+          }}
+        >
           <div>
-            <h3 style={{
-              ...styles.contactSectionTitle,
-              ...(isMobile ? styles.contactSectionTitleMobile : {})
-            }}>Email</h3>
-            <a 
-              href="mailto:rojorusselgem@gmail.com" 
+            <h3
+              style={{
+                ...styles.contactSectionTitle,
+                ...(isMobile ? styles.contactSectionTitleMobile : {}),
+              }}
+            >
+              Email
+            </h3>
+            <a
+              href='mailto:rojorusselgem@gmail.com'
               style={{
                 ...styles.contactLink,
-                ...(isMobile ? styles.contactLinkMobile : {})
+                ...(isMobile ? styles.contactLinkMobile : {}),
               }}
               onMouseEnter={(e) => {
-                e.target.style.color = '#ffffff';
-                e.target.style.transform = 'translateX(8px)';
+                e.target.style.color = "#ffffff";
+                e.target.style.transform = "translateX(8px)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.color = '#d1d5db';
-                e.target.style.transform = 'translateX(0)';
+                e.target.style.color = "#d1d5db";
+                e.target.style.transform = "translateX(0)";
               }}
             >
               rojorusselgem@gmail.com
             </a>
           </div>
-          
+
           <div>
-            <h3 style={{
-              ...styles.contactSectionTitle,
-              ...(isMobile ? styles.contactSectionTitleMobile : {})
-            }}>Social & Work</h3>
+            <h3
+              style={{
+                ...styles.contactSectionTitle,
+                ...(isMobile ? styles.contactSectionTitleMobile : {}),
+              }}
+            >
+              Social & Work
+            </h3>
             <div>
-              <a 
-                href="https://github.com/Patsimim" 
-                target="_blank"
-                rel="noopener noreferrer"
+              <a
+                href='https://github.com/Patsimim'
+                target='_blank'
+                rel='noopener noreferrer'
                 style={{
                   ...styles.contactLinkBlock,
-                  ...(isMobile ? styles.contactLinkBlockMobile : {})
+                  ...(isMobile ? styles.contactLinkBlockMobile : {}),
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#ffffff';
-                  e.target.style.transform = 'translateX(8px)';
+                  e.target.style.color = "#ffffff";
+                  e.target.style.transform = "translateX(8px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#d1d5db';
-                  e.target.style.transform = 'translateX(0)';
+                  e.target.style.color = "#d1d5db";
+                  e.target.style.transform = "translateX(0)";
                 }}
               >
                 GitHub ↗
               </a>
-              <a 
-                href="https://www.linkedin.com/in/russel-gem-rojo-486079355/" 
-                target="_blank"
-                rel="noopener noreferrer"
+              <a
+                href='https://www.linkedin.com/in/russel-gem-rojo-486079355/'
+                target='_blank'
+                rel='noopener noreferrer'
                 style={{
                   ...styles.contactLinkBlock,
-                  ...(isMobile ? styles.contactLinkBlockMobile : {})
+                  ...(isMobile ? styles.contactLinkBlockMobile : {}),
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#ffffff';
-                  e.target.style.transform = 'translateX(8px)';
+                  e.target.style.color = "#ffffff";
+                  e.target.style.transform = "translateX(8px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#d1d5db';
-                  e.target.style.transform = 'translateX(0)';
+                  e.target.style.color = "#d1d5db";
+                  e.target.style.transform = "translateX(0)";
                 }}
               >
                 LinkedIn ↗
               </a>
-              <a 
-                href="#" 
+              <a
+                href='#'
                 style={{
                   ...styles.contactLinkBlock,
-                  ...(isMobile ? styles.contactLinkBlockMobile : {})
+                  ...(isMobile ? styles.contactLinkBlockMobile : {}),
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = '#ffffff';
-                  e.target.style.transform = 'translateX(8px)';
+                  e.target.style.color = "#ffffff";
+                  e.target.style.transform = "translateX(8px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = '#d1d5db';
-                  e.target.style.transform = 'translateX(0)';
+                  e.target.style.color = "#d1d5db";
+                  e.target.style.transform = "translateX(0)";
                 }}
               >
                 Portfolio ↗
               </a>
             </div>
           </div>
-          
+
           <div>
-            <h3 style={{
-              ...styles.contactSectionTitle,
-              ...(isMobile ? styles.contactSectionTitleMobile : {})
-            }}>Response Time</h3>
-            <p style={{
-              ...styles.contactText,
-              ...(isMobile ? styles.contactTextMobile : {})
-            }}>Usually within 24 hours</p>
+            <h3
+              style={{
+                ...styles.contactSectionTitle,
+                ...(isMobile ? styles.contactSectionTitleMobile : {}),
+              }}
+            >
+              Response Time
+            </h3>
+            <p
+              style={{
+                ...styles.contactText,
+                ...(isMobile ? styles.contactTextMobile : {}),
+              }}
+            >
+              Usually within 24 hours
+            </p>
           </div>
         </div>
       </div>
@@ -252,15 +298,22 @@ const MainContent = ({
 
   // Projects page layout
   const ProjectsPage = () => (
-    <div style={{
-      ...styles.projectsPage,
-      ...(isMobile ? styles.projectsPageMobile : {})
-    }}>
-      <section aria-label="All projects">
+    <div
+      style={{
+        ...styles.projectsPage,
+        ...(isMobile ? styles.projectsPageMobile : {}),
+      }}
+    >
+      <section aria-label='All projects'>
         {(projects || []).map((project, index) => (
-          <ProjectCard key={project.id || index} project={project} index={index} isMobile={isMobile} />
+          <ProjectCard
+            key={project.id || index}
+            project={project}
+            index={index}
+            isMobile={isMobile}
+          />
         ))}
-        
+
         {(!projects || projects.length === 0) && (
           <p style={styles.projectsEmpty}>No projects available.</p>
         )}
@@ -270,11 +323,11 @@ const MainContent = ({
 
   const renderContent = () => {
     switch (activeItem) {
-      case 'home':
+      case "home":
         return <HomePage />;
-      case 'projects':
+      case "projects":
         return <ProjectsPage />;
-      case 'contact':
+      case "contact":
         return <ContactPage />;
       default:
         return <HomePage />;
@@ -282,263 +335,261 @@ const MainContent = ({
   };
 
   return (
-    <main style={{
-      ...styles.main,
-      ...(isMobile ? styles.mainMobile : {})
-    }}>
+    <main
+      style={{
+        ...styles.main,
+        ...(isMobile ? styles.mainMobile : {}),
+      }}
+    >
       {/* Noise texture overlay */}
       <div style={styles.noiseOverlay} />
-      
-      <div style={styles.contentContainer}>
-        {renderContent()}
-      </div>
+
+      <div style={styles.contentContainer}>{renderContent()}</div>
     </main>
   );
 };
 
 const styles = {
-  // Desktop styles (keep original)
+  // Desktop styles
   main: {
-    minHeight: '100vh',
-    paddingLeft: '420px', // Adjusted to match sidebar width
-    position: 'relative'
+    minHeight: "100vh",
+    paddingLeft: "420px",
+    position: "relative",
   },
   contentContainer: {
-    position: 'relative',
-    zIndex: 1
+    position: "relative",
+    zIndex: 1,
   },
-  // Right Content Container Styles
   rightContentContainer: {
-    minHeight: '100vh',
-    display: 'flex'
+    minHeight: "100vh",
+    display: "flex",
   },
   rightContentSpacer: {
-    flex: 1
+    flex: 1,
   },
   rightContentMain: {
-    width: '384px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    paddingRight: '64px',
-    paddingTop: '80px',
-    paddingBottom: '80px'
+    width: "384px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    paddingRight: "64px",
+    paddingTop: "80px",
+    paddingBottom: "80px",
   },
   // Home Page Styles
   homePage: {
-    padding: '80px 64px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh'
+    padding: "80px 64px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "100vh",
   },
   homeContent: {
-    maxWidth: '512px',
-    textAlign: 'center'
+    maxWidth: "512px",
+    textAlign: "center",
   },
-    homeTitle: {
-    fontSize: 'clamp(38px, 8vw, 90px)',
-    fontWeight: '100',
-    color: '#ffffff',
-    marginBottom: '48px',
-    letterSpacing: '-0.025em',
-    textAlign: 'center'
+  homeTitle: {
+    fontSize: "clamp(38px, 8vw, 90px)",
+    fontWeight: "100",
+    color: "#ffffff",
+    marginBottom: "48px",
+    letterSpacing: "-0.025em",
+    textAlign: "center",
   },
   homeText: {
-    marginBottom: '32px'
+    marginBottom: "32px",
   },
   homeParagraph: {
-    fontSize: 'clamp(16px, 2vw, 18px)',
-    fontWeight: '300',
-    lineHeight: '1.6',
-    color: '#d1d5db'
+    fontSize: "clamp(16px, 2vw, 18px)",
+    fontWeight: "300",
+    lineHeight: "1.6",
+    color: "#d1d5db",
   },
   expertiseSection: {
-    paddingTop: '16px'
+    paddingTop: "16px",
   },
   expertiseTitle: {
-    color: '#ffffff',
-    marginBottom: '16px',
-    fontSize: '16px',
-    fontWeight: '400',
-    transition: 'all 0.3s ease'
+    color: "#ffffff",
+    marginBottom: "16px",
+    fontSize: "16px",
+    fontWeight: "400",
+    transition: "all 0.3s ease",
   },
   techStackContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: '16px',
-    minHeight: '150px',
-    overflow: 'hidden'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "16px",
+    minHeight: "150px",
+    overflow: "hidden",
   },
   techStackWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '48px',
-    width: '100%'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "48px",
+    width: "100%",
   },
   techItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '12px',
-    opacity: 1
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "12px",
+    opacity: 1,
   },
   techImage: {
-    width: '96px',
-    height: '96px',
-    objectFit: 'contain',
-    filter: 'brightness(0.9)',
-    transition: 'all 0.3s ease'
+    width: "96px",
+    height: "96px",
+    objectFit: "contain",
+    filter: "brightness(0.9)",
+    transition: "all 0.3s ease",
   },
   techName: {
-    color: '#9ca3af',
-    fontSize: '14px',
-    fontWeight: '300',
-    textAlign: 'center'
+    color: "#9ca3af",
+    fontSize: "14px",
+    fontWeight: "300",
+    textAlign: "center",
   },
   // Contact Page Styles
   contactContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px'
+    display: "flex",
+    flexDirection: "column",
+    gap: "24px",
   },
   contactTitle: {
-    fontSize: '24px',
-    fontWeight: '300',
-    color: '#ffffff',
-    marginBottom: '24px'
+    fontSize: "24px",
+    fontWeight: "300",
+    color: "#ffffff",
+    marginBottom: "24px",
   },
   contactSections: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
-    fontSize: '14px'
+    display: "flex",
+    flexDirection: "column",
+    gap: "24px",
+    fontSize: "14px",
   },
   contactSectionTitle: {
-    color: '#ffffff',
-    marginBottom: '8px',
-    fontSize: '16px',
-    fontWeight: '400'
+    color: "#ffffff",
+    marginBottom: "8px",
+    fontSize: "16px",
+    fontWeight: "400",
   },
   contactLink: {
-    color: '#d1d5db',
-    textDecoration: 'none',
-    transition: 'all 0.2s ease',
-    display: 'inline-block'
+    color: "#d1d5db",
+    textDecoration: "none",
+    transition: "all 0.2s ease",
+    display: "inline-block",
   },
   contactLinkBlock: {
-    color: '#d1d5db',
-    textDecoration: 'none',
-    transition: 'all 0.2s ease',
-    display: 'block',
-    marginBottom: '8px'
+    color: "#d1d5db",
+    textDecoration: "none",
+    transition: "all 0.2s ease",
+    display: "block",
+    marginBottom: "8px",
   },
   contactText: {
-    color: '#d1d5db'
+    color: "#d1d5db",
   },
   // Projects Page Styles
   projectsPage: {
-    padding: '80px 64px'
+    padding: "80px 64px",
   },
   projectsHeader: {
-    marginBottom: '48px'
+    marginBottom: "48px",
   },
   projectsTitle: {
-    fontSize: '36px',
-    fontWeight: '300',
-    color: '#ffffff',
-    marginBottom: '32px'
+    fontSize: "36px",
+    fontWeight: "300",
+    color: "#ffffff",
+    marginBottom: "32px",
   },
   projectsEmpty: {
-    color: '#9ca3af',
-    fontSize: '18px'
+    color: "#9ca3af",
+    fontSize: "18px",
   },
 
   // Mobile styles
   mainMobile: {
-    paddingLeft: '0',
-    paddingTop: '70px' // Account for mobile header
+    paddingLeft: "0",
+    paddingTop: "70px",
   },
   rightContentContainerMobile: {
-    minHeight: 'calc(100vh - 70px)',
-    flexDirection: 'column'
+    minHeight: "calc(100vh - 70px)",
+    flexDirection: "column",
   },
   rightContentMainMobile: {
-    width: '100%',
-    padding: '40px 20px',
-    justifyContent: 'flex-start'
+    width: "100%",
+    padding: "40px 20px",
+    justifyContent: "flex-start",
   },
   homePageMobile: {
-    padding: '40px 20px',
-    minHeight: 'calc(100vh - 70px)',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    paddingTop: '60px'
+    padding: "40px 20px",
+    minHeight: "calc(100vh - 70px)",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    paddingTop: "60px",
   },
   homeContentMobile: {
-    maxWidth: '100%',
-    textAlign: 'center'
+    maxWidth: "100%",
+    textAlign: "center",
   },
   homeTitleMobile: {
-    fontSize: 'clamp(32px, 10vw, 48px)',
-    marginBottom: '32px'
+    fontSize: "clamp(32px, 10vw, 48px)",
+    marginBottom: "32px",
   },
   homeParagraphMobile: {
-    fontSize: '16px',
-    textAlign: 'center'
+    fontSize: "16px",
+    textAlign: "center",
   },
   techStackContainerMobile: {
-    minHeight: '120px'
+    minHeight: "120px",
   },
   techStackWrapperMobile: {
-    gap: '24px',
-    flexWrap: 'wrap',
-    justifyContent: 'center'
+    gap: "24px",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
   techItemMobile: {
-    gap: '8px'
+    gap: "8px",
   },
   techImageMobile: {
-    width: '60px',
-    height: '60px'
+    width: "60px",
+    height: "60px",
   },
   techNameMobile: {
-    fontSize: '12px'
+    fontSize: "12px",
   },
   contactSectionsMobile: {
-    gap: '32px'
+    gap: "32px",
   },
   contactSectionTitleMobile: {
-    fontSize: '18px',
-    marginBottom: '12px'
+    fontSize: "18px",
+    marginBottom: "12px",
   },
   contactLinkMobile: {
-    fontSize: '16px'
+    fontSize: "16px",
   },
   contactLinkBlockMobile: {
-    fontSize: '16px',
-    marginBottom: '12px'
+    fontSize: "16px",
+    marginBottom: "12px",
   },
   contactTextMobile: {
-    fontSize: '16px'
+    fontSize: "16px",
   },
   projectsPageMobile: {
-    padding: '40px 20px'
+    padding: "40px 20px",
   },
   noiseOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
     opacity: 0.1,
-    pointerEvents: 'none'
-  }
+    pointerEvents: "none",
+  },
 };
 
-// Add CSS animation for smooth left-to-right transition
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   @keyframes slideInFromLeft {

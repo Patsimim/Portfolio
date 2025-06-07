@@ -1,26 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faClipboard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHouse,
+  faClipboard,
+  faAddressBook,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Icon mapping for navigation items
 const getNavigationIcon = (itemId) => {
   switch (itemId) {
-    case 'home':
+    case "home":
       return faHouse;
-    case 'projects':
+    case "projects":
       return faClipboard;
-    case 'contact':
+    case "contact":
       return faAddressBook;
     default:
       return faHouse;
   }
 };
 
-const Navigation = ({ items, activeItem, onItemClick, isMobile, closeMobileMenu }) => {
+const Navigation = ({
+  items,
+  activeItem,
+  onItemClick,
+  isMobile,
+  closeMobileMenu,
+}) => {
   const [hoveredItem, setHoveredItem] = useState(null);
 
   return (
-    <nav style={styles.navigation} role="navigation" aria-label="Main navigation">
+    <nav
+      style={styles.navigation}
+      role='navigation'
+      aria-label='Main navigation'
+    >
       {items.map((item) => (
         <div key={item.id} style={styles.navItemContainer}>
           <button
@@ -32,16 +46,20 @@ const Navigation = ({ items, activeItem, onItemClick, isMobile, closeMobileMenu 
             }}
             style={{
               ...styles.navButton,
-              ...(activeItem === item.id ? styles.navButtonActive : styles.navButtonInactive),
+              ...(activeItem === item.id
+                ? styles.navButtonActive
+                : styles.navButtonInactive),
               ...(isMobile ? styles.navButtonMobile : styles.navButtonDesktop),
               // Dynamic width for desktop based on hover state
-              ...(!isMobile && hoveredItem === item.id ? styles.navButtonDesktopExpanded : {})
+              ...(!isMobile && hoveredItem === item.id
+                ? styles.navButtonDesktopExpanded
+                : {}),
             }}
             onMouseEnter={(e) => {
               if (!isMobile) {
                 // Don't transform the entire button, just handle color
                 if (activeItem !== item.id) {
-                  e.target.style.color = '#d1d5db';
+                  e.target.style.color = "#d1d5db";
                 }
               }
             }}
@@ -49,35 +67,37 @@ const Navigation = ({ items, activeItem, onItemClick, isMobile, closeMobileMenu 
               if (!isMobile) {
                 // Don't transform the entire button, just handle color
                 if (activeItem !== item.id) {
-                  e.target.style.color = '#9ca3af';
+                  e.target.style.color = "#9ca3af";
                 }
               }
             }}
-            aria-current={activeItem === item.id ? 'page' : undefined}
+            aria-current={activeItem === item.id ? "page" : undefined}
             aria-label={item.label}
           >
-            <div style={{
-              ...styles.navButtonContent,
-              ...(isMobile ? {} : styles.navButtonContentDesktop)
-            }}>
+            <div
+              style={{
+                ...styles.navButtonContent,
+                ...(isMobile ? {} : styles.navButtonContentDesktop),
+              }}
+            >
               {/* Desktop: Show icon or text based on hover state */}
               {!isMobile ? (
-                <div 
+                <div
                   style={styles.iconContainer}
                   onMouseEnter={(e) => {
                     setHoveredItem(item.id);
-                    e.target.style.transform = 'scale(1.1)';
+                    e.target.style.transform = "scale(1.1)";
                   }}
                   onMouseLeave={(e) => {
                     setHoveredItem(null);
-                    e.target.style.transform = 'scale(1)';
+                    e.target.style.transform = "scale(1)";
                   }}
                 >
                   {hoveredItem === item.id ? (
                     <span style={styles.navTextDesktop}>{item.label}</span>
                   ) : (
-                    <FontAwesomeIcon 
-                      icon={getNavigationIcon(item.id)} 
+                    <FontAwesomeIcon
+                      icon={getNavigationIcon(item.id)}
                       style={styles.navIconDesktop}
                     />
                   )}
@@ -85,8 +105,8 @@ const Navigation = ({ items, activeItem, onItemClick, isMobile, closeMobileMenu 
               ) : (
                 // Mobile: Show both icon and text
                 <>
-                  <FontAwesomeIcon 
-                    icon={getNavigationIcon(item.id)} 
+                  <FontAwesomeIcon
+                    icon={getNavigationIcon(item.id)}
                     style={styles.navIconMobile}
                   />
                   <span style={styles.navTextMobile}>{item.label}</span>
@@ -115,32 +135,37 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
     };
 
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isMobile && isMobileMenuOpen && !event.target.closest('.sidebar') && !event.target.closest('.mobile-menu-toggle')) {
+      if (
+        isMobile &&
+        isMobileMenuOpen &&
+        !event.target.closest(".sidebar") &&
+        !event.target.closest(".mobile-menu-toggle")
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobile, isMobileMenuOpen]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobile && isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
-    
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isMobile, isMobileMenuOpen]);
 
@@ -158,24 +183,34 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
         {/* Mobile Header */}
         <header style={styles.mobileHeader}>
           <div style={styles.mobileHeaderContent}>
-            <button 
-              className="mobile-menu-toggle"
+            <button
+              className='mobile-menu-toggle'
               style={styles.hamburger}
               onClick={toggleMobileMenu}
-              aria-label="Toggle navigation menu"
+              aria-label='Toggle navigation menu'
             >
-              <span style={{
-                ...styles.hamburgerLine,
-                transform: isMobileMenuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'
-              }}></span>
-              <span style={{
-                ...styles.hamburgerLine,
-                opacity: isMobileMenuOpen ? '0' : '1'
-              }}></span>
-              <span style={{
-                ...styles.hamburgerLine,
-                transform: isMobileMenuOpen ? 'rotate(-45deg) translate(7px, -6px)' : 'none'
-              }}></span>
+              <span
+                style={{
+                  ...styles.hamburgerLine,
+                  transform: isMobileMenuOpen
+                    ? "rotate(45deg) translate(5px, 5px)"
+                    : "none",
+                }}
+              ></span>
+              <span
+                style={{
+                  ...styles.hamburgerLine,
+                  opacity: isMobileMenuOpen ? "0" : "1",
+                }}
+              ></span>
+              <span
+                style={{
+                  ...styles.hamburgerLine,
+                  transform: isMobileMenuOpen
+                    ? "rotate(-45deg) translate(7px, -6px)"
+                    : "none",
+                }}
+              ></span>
             </button>
           </div>
         </header>
@@ -183,11 +218,13 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div style={styles.mobileOverlay} onClick={closeMobileMenu}>
-            <aside 
-              className="sidebar"
+            <aside
+              className='sidebar'
               style={{
                 ...styles.mobileSidebar,
-                transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'
+                transform: isMobileMenuOpen
+                  ? "translateX(0)"
+                  : "translateX(-100%)",
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -198,8 +235,8 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
               </div>
 
               {/* Navigation */}
-              <Navigation 
-                items={navigation} 
+              <Navigation
+                items={navigation}
                 activeItem={activeItem}
                 onItemClick={onNavigationClick}
                 isMobile={true}
@@ -219,23 +256,19 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
 
   // Desktop sidebar (original design)
   return (
-    <aside style={styles.sidebar} className="sidebar">
+    <aside style={styles.sidebar} className='sidebar'>
       {/* Header */}
       <div style={styles.header}>
-        <h1 style={styles.title}>
-          {profile.name}
-        </h1>
-        <p style={styles.subtitle}>
-          {profile.title}
-        </p>
+        <h1 style={styles.title}>{profile.name}</h1>
+        <p style={styles.subtitle}>{profile.title}</p>
       </div>
 
       {/* Top spacer */}
       <div style={styles.spacerTop}></div>
 
       {/* Navigation */}
-      <Navigation 
-        items={navigation} 
+      <Navigation
+        items={navigation}
         activeItem={activeItem}
         onItemClick={onNavigationClick}
         isMobile={false}
@@ -255,254 +288,254 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
 const styles = {
   // Desktop sidebar styles (keep original)
   sidebar: {
-    position: 'fixed',
+    position: "fixed",
     left: 0,
     top: 0,
-    height: '100vh',
-    width: '420px',
-    backgroundColor: '#000000',
-    padding: '32px',
-    display: 'flex',
-    flexDirection: 'column',
-    zIndex: 10
+    height: "100vh",
+    width: "420px",
+    backgroundColor: "#000000",
+    padding: "32px",
+    display: "flex",
+    flexDirection: "column",
+    zIndex: 10,
   },
   header: {
-    marginBottom: '48px'
+    marginBottom: "48px",
   },
   title: {
-    fontSize: '40px',
-    fontWeight: '300',
-    color: '#ffffff',
-    marginBottom: '8px',
-    letterSpacing: '0.025em',
-    margin: 0
+    fontSize: "40px",
+    fontWeight: "300",
+    color: "#ffffff",
+    marginBottom: "8px",
+    letterSpacing: "0.025em",
+    margin: 0,
   },
   subtitle: {
-    fontSize: '20px',
-    color: '#9ca3af',
-    fontWeight: '300',
-    margin: 0
+    fontSize: "20px",
+    color: "#9ca3af",
+    fontWeight: "300",
+    margin: 0,
   },
   spacerTop: {
-    flex: 1
+    flex: 1,
   },
   navigation: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px'
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
   },
   navButton: {
-    fontSize: '24px',
-    fontWeight: '400',
-    letterSpacing: '0.025em',
-    transition: 'all 0.2s ease',
-    display: 'block',
-    padding: '8px 16px',
-    width: '100%',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    outline: 'none'
+    fontSize: "24px",
+    fontWeight: "400",
+    letterSpacing: "0.025em",
+    transition: "all 0.2s ease",
+    display: "block",
+    padding: "8px 16px",
+    width: "100%",
+    textAlign: "left",
+    backgroundColor: "transparent",
+    border: "none",
+    cursor: "pointer",
+    outline: "none",
   },
   navButtonActive: {
-    color: '#ffffff'
+    color: "#ffffff",
   },
   navButtonInactive: {
-    color: '#9ca3af'
+    color: "#9ca3af",
   },
   navButtonMobile: {
-    fontSize: '20px',
-    padding: '12px 16px'
+    fontSize: "20px",
+    padding: "12px 16px",
   },
   spacerBottom: {
     flex: 1,
-    minHeight: '80px'
+    minHeight: "80px",
   },
   footer: {
-    fontSize: '14px',
-    color: '#6b7280',
-    fontWeight: '300'
+    fontSize: "14px",
+    color: "#6b7280",
+    fontWeight: "300",
   },
 
   // Mobile styles
   mobileHeader: {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
-    height: '70px',
-    backgroundColor: 'transparent', 
+    height: "70px",
+    backgroundColor: "transparent",
     zIndex: 20,
-    display: 'flex',
-    alignItems: 'center',
-    pointerEvents: 'none' 
+    display: "flex",
+    alignItems: "center",
+    pointerEvents: "none",
   },
   mobileHeaderContent: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    width: '100%',
-    padding: '0 20px'
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    width: "100%",
+    padding: "0 20px",
   },
   hamburger: {
-    background: 'rgba(0, 0, 0, 0.8)', 
-    border: 'none',
-    cursor: 'pointer',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    width: '48px',
-    height: '48px',
-    padding: '12px',
-    borderRadius: '8px',
-    pointerEvents: 'auto',
-    backdropFilter: 'blur(8px)'
+    background: "rgba(0, 0, 0, 0.8)",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    width: "48px",
+    height: "48px",
+    padding: "12px",
+    borderRadius: "8px",
+    pointerEvents: "auto",
+    backdropFilter: "blur(8px)",
   },
   hamburgerLine: {
-    display: 'block',
-    height: '2px',
-    width: '100%',
-    backgroundColor: '#ffffff',
-    transformOrigin: '1px',
-    transition: 'all 0.3s ease'
+    display: "block",
+    height: "2px",
+    width: "100%",
+    backgroundColor: "#ffffff",
+    transformOrigin: "1px",
+    transition: "all 0.3s ease",
   },
   mobileOverlay: {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 15,
-    backdropFilter: 'blur(2px)' 
+    backdropFilter: "blur(2px)",
   },
   mobileSidebar: {
-    position: 'fixed',
+    position: "fixed",
     left: 0,
     top: 0,
-    height: '100vh',
-    width: '280px',
-    backgroundColor: '#000000',
-    padding: '32px 24px',
-    display: 'flex',
-    flexDirection: 'column',
+    height: "100vh",
+    width: "280px",
+    backgroundColor: "#000000",
+    padding: "32px 24px",
+    display: "flex",
+    flexDirection: "column",
     zIndex: 25,
-    transition: 'transform 0.3s ease',
-    borderRight: '1px solid #333'
+    transition: "transform 0.3s ease",
+    borderRight: "1px solid #333",
   },
   mobileMenuHeader: {
-    marginBottom: '40px',
-    paddingTop: '20px'
+    marginBottom: "40px",
+    paddingTop: "20px",
   },
   mobileTitle: {
-    fontSize: '26px', 
-    fontWeight: '300',
-    color: '#ffffff',
-    marginBottom: '8px',
-    letterSpacing: '0.025em',
-    margin: 0
+    fontSize: "26px",
+    fontWeight: "300",
+    color: "#ffffff",
+    marginBottom: "8px",
+    letterSpacing: "0.025em",
+    margin: 0,
   },
   mobileSubtitle: {
-    fontSize: '16px',
-    color: '#9ca3af',
-    fontWeight: '300',
-    margin: 0
+    fontSize: "16px",
+    color: "#9ca3af",
+    fontWeight: "300",
+    margin: 0,
   },
   mobileFooter: {
-    fontSize: '14px',
-    color: '#6b7280',
-    fontWeight: '300',
-    marginTop: 'auto',
-    paddingTop: '20px'
+    fontSize: "14px",
+    color: "#6b7280",
+    fontWeight: "300",
+    marginTop: "auto",
+    paddingTop: "20px",
   },
 
   // Navigation icon styles
   navItemContainer: {
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center'
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
   },
   navButtonContent: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    width: '100%'
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    width: "100%",
   },
   navButtonContentDesktop: {
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     gap: 0,
-    width: '100%'
+    width: "100%",
   },
   navButtonDesktop: {
-    width: '100%',
-    height: '64px',
-    borderRadius: '12px',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    display: 'flex',
-    padding: '8px 16px',
-    transition: 'all 0.2s ease',
-    textAlign: 'left'
+    width: "100%",
+    height: "64px",
+    borderRadius: "12px",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    display: "flex",
+    padding: "8px 16px",
+    transition: "all 0.2s ease",
+    textAlign: "left",
   },
   iconContainer: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    minWidth: '24px',
-    height: '24px',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease'
+    display: "inline-flex",
+    alignItems: "center",
+    minWidth: "24px",
+    height: "24px",
+    justifyContent: "center",
+    cursor: "pointer",
+    transition: "transform 0.2s ease",
   },
   navIcon: {
-    fontSize: '20px',
-    minWidth: '24px',
-    textAlign: 'center'
+    fontSize: "20px",
+    minWidth: "24px",
+    textAlign: "center",
   },
   navIconDesktop: {
-    fontSize: '20px',
-    width: '20px',
-    height: '20px',
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    fontSize: "20px",
+    width: "20px",
+    height: "20px",
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   navIconMobile: {
-    fontSize: '24px',
-    minWidth: '32px'
+    fontSize: "24px",
+    minWidth: "32px",
   },
   navTextDesktop: {
-    fontSize: '24px',
-    fontWeight: '400',
-    letterSpacing: '0.025em',
-    animation: 'fadeInText 0.3s ease-in-out'
+    fontSize: "24px",
+    fontWeight: "400",
+    letterSpacing: "0.025em",
+    animation: "fadeInText 0.3s ease-in-out",
   },
   navTextMobile: {
-    fontSize: '20px',
-    fontWeight: '400',
-    letterSpacing: '0.025em'
+    fontSize: "20px",
+    fontWeight: "400",
+    letterSpacing: "0.025em",
   },
   tooltip: {
-    position: 'absolute',
-    left: '100%',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    marginLeft: '16px',
-    backgroundColor: '#333',
-    color: '#ffffff',
-    padding: '10px 16px',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '400',
-    whiteSpace: 'nowrap',
+    position: "absolute",
+    left: "100%",
+    top: "50%",
+    transform: "translateY(-50%)",
+    marginLeft: "16px",
+    backgroundColor: "#333",
+    color: "#ffffff",
+    padding: "10px 16px",
+    borderRadius: "8px",
+    fontSize: "16px",
+    fontWeight: "400",
+    whiteSpace: "nowrap",
     zIndex: 100,
-    pointerEvents: 'none',
+    pointerEvents: "none",
     opacity: 0.95,
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
-    animation: 'fadeIn 0.2s ease-out',
-    border: '1px solid #555'
-  }
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4)",
+    animation: "fadeIn 0.2s ease-out",
+    border: "1px solid #555",
+  },
 };
 
 // Add CSS for tooltip animation
@@ -530,8 +563,8 @@ styleSheet.innerText = `
     }
   }
 `;
-if (!document.head.querySelector('style[data-sidebar-styles]')) {
-  styleSheet.setAttribute('data-sidebar-styles', 'true');
+if (!document.head.querySelector("style[data-sidebar-styles]")) {
+  styleSheet.setAttribute("data-sidebar-styles", "true");
   document.head.appendChild(styleSheet);
 }
 
