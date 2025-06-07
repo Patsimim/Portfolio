@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faLink } from '@fortawesome/free-solid-svg-icons';
 import { faApple, faAndroid } from '@fortawesome/free-brands-svg-icons';
 
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = ({ project, index, isMobile }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredButton, setHoveredButton] = useState(null);
@@ -38,11 +38,25 @@ const ProjectCard = ({ project, index }) => {
     }
   };
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isModalOpen]);
+
   return (
     <>
       <article 
         style={{
           ...styles.article,
+          ...(isMobile ? styles.articleMobile : {}),
           transform: isHovered ? 'translateX(-8px)' : 'translateX(0)'
         }}
         onClick={handleClick}
@@ -50,14 +64,21 @@ const ProjectCard = ({ project, index }) => {
         onMouseLeave={handleMouseLeave}
       >
         <div style={styles.projectContent}>
-          <div style={styles.projectInfo}>
+          <div style={{
+            ...styles.projectInfo,
+            ...(isMobile ? styles.projectInfoMobile : {})
+          }}>
             <h3 style={{
               ...styles.title,
+              ...(isMobile ? styles.titleMobile : {}),
               color: isHovered ? '#d1d5db' : '#ffffff'
             }}>
               {project.title}
             </h3>
-            <div style={styles.meta}>
+            <div style={{
+              ...styles.meta,
+              ...(isMobile ? styles.metaMobile : {})
+            }}>
               {project.date} / {project.category}
             </div>
           </div>
@@ -66,12 +87,19 @@ const ProjectCard = ({ project, index }) => {
 
       {/* Modal */}
       {isModalOpen && (
-        <div style={styles.modalOverlay} onClick={closeModal}>
-          <div style={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+        <div style={{
+          ...styles.modalOverlay,
+          ...(isMobile ? styles.modalOverlayMobile : {})
+        }} onClick={closeModal}>
+          <div style={{
+            ...styles.modalCard,
+            ...(isMobile ? styles.modalCardMobile : {})
+          }} onClick={(e) => e.stopPropagation()}>
             {/* Close button */}
             <button 
               style={{
                 ...styles.closeButton,
+                ...(isMobile ? styles.closeButtonMobile : {}),
                 backgroundColor: hoveredButton === 'close' ? '#333' : 'transparent'
               }}
               onClick={closeModal}
@@ -82,16 +110,28 @@ const ProjectCard = ({ project, index }) => {
             </button>
             
             {/* Modal content */}
-            <div style={styles.modalContent}>
-              <h2 style={styles.modalTitle}>{project.title}</h2>
+            <div style={{
+              ...styles.modalContent,
+              ...(isMobile ? styles.modalContentMobile : {})
+            }}>
+              <h2 style={{
+                ...styles.modalTitle,
+                ...(isMobile ? styles.modalTitleMobile : {})
+              }}>{project.title}</h2>
               
               {/* Project Image instead of meta info */}
               {project.image && (
-                <div style={styles.modalImageContainer}>
+                <div style={{
+                  ...styles.modalImageContainer,
+                  ...(isMobile ? styles.modalImageContainerMobile : {})
+                }}>
                   <img 
                     src={project.image} 
                     alt={`${project.title} screenshot`}
-                    style={styles.modalImage}
+                    style={{
+                      ...styles.modalImage,
+                      ...(isMobile ? styles.modalImageMobile : {})
+                    }}
                     onError={(e) => {
                       e.target.style.display = 'none';
                     }}
@@ -100,15 +140,30 @@ const ProjectCard = ({ project, index }) => {
               )}
               
               <div style={styles.modalDescription}>
-                <h3 style={styles.sectionTitle}>Project Description</h3>
-                <p style={styles.descriptionText}>
+                <h3 style={{
+                  ...styles.sectionTitle,
+                  ...(isMobile ? styles.sectionTitleMobile : {})
+                }}>Project Description</h3>
+                <p style={{
+                  ...styles.descriptionText,
+                  ...(isMobile ? styles.descriptionTextMobile : {})
+                }}>
                   {project.description || "A comprehensive fullstack application built with modern technologies. This project showcases advanced development skills and clean architecture patterns."}
                 </p>
                 
-                <h3 style={styles.sectionTitle}>Technologies Used</h3>
-                <div style={styles.techStack}>
+                <h3 style={{
+                  ...styles.sectionTitle,
+                  ...(isMobile ? styles.sectionTitleMobile : {})
+                }}>Technologies Used</h3>
+                <div style={{
+                  ...styles.techStack,
+                  ...(isMobile ? styles.techStackMobile : {})
+                }}>
                   {(project.technologies || ["React", "Node.js", "PostgreSQL", "AWS"]).map((tech, index) => (
-                    <span key={index} style={styles.techTag}>
+                    <span key={index} style={{
+                      ...styles.techTag,
+                      ...(isMobile ? styles.techTagMobile : {})
+                    }}>
                       {tech}
                     </span>
                   ))}
@@ -118,7 +173,10 @@ const ProjectCard = ({ project, index }) => {
               {/* View Live Links */}
               {project.viewLive && project.viewLive.length > 0 && (
                 <div style={styles.modalActions}>
-                  <h3 style={styles.sectionTitle}>View Live</h3>
+                  <h3 style={{
+                    ...styles.sectionTitle,
+                    ...(isMobile ? styles.sectionTitleMobile : {})
+                  }}>View Live</h3>
                   <div style={styles.viewLiveContainer}>
                     {project.viewLive.map((link, index) => (
                       <a 
@@ -126,6 +184,7 @@ const ProjectCard = ({ project, index }) => {
                         href={link.url} 
                         style={{
                           ...styles.actionButton,
+                          ...(isMobile ? styles.actionButtonMobile : {}),
                           backgroundColor: hoveredButton === `live-${index}` ? '#555' : '#333'
                         }}
                         target="_blank" 
@@ -322,6 +381,74 @@ const styles = {
   platformIcon: {
     fontSize: '16px',
     minWidth: '20px'
+  },
+
+  // Mobile styles
+  articleMobile: {
+    marginBottom: '32px',
+    justifyContent: 'center',
+    textAlign: 'center',
+    transform: 'none !important' // Disable transform on mobile for better performance
+  },
+  projectInfoMobile: {
+    textAlign: 'center'
+  },
+  titleMobile: {
+    fontSize: 'clamp(24px, 8vw, 36px)'
+  },
+  metaMobile: {
+    fontSize: '13px'
+  },
+  modalOverlayMobile: {
+    padding: '10px',
+    alignItems: 'flex-start',
+    paddingTop: '20px'
+  },
+  modalCardMobile: {
+    maxWidth: '100%',
+    maxHeight: '90vh',
+    margin: '0',
+    borderRadius: '8px'
+  },
+  closeButtonMobile: {
+    top: '12px',
+    right: '12px',
+    fontSize: '28px',
+    padding: '8px 12px'
+  },
+  modalContentMobile: {
+    padding: '24px 20px'
+  },
+  modalImageContainerMobile: {
+    marginBottom: '24px',
+    borderRadius: '8px'
+  },
+  modalImageMobile: {
+    maxHeight: '200px'
+  },
+  modalTitleMobile: {
+    fontSize: '24px',
+    marginBottom: '20px'
+  },
+  sectionTitleMobile: {
+    fontSize: '16px',
+    marginBottom: '12px'
+  },
+  descriptionTextMobile: {
+    fontSize: '14px',
+    marginBottom: '20px'
+  },
+  techStackMobile: {
+    gap: '6px',
+    marginBottom: '20px'
+  },
+  techTagMobile: {
+    padding: '3px 8px',
+    fontSize: '11px'
+  },
+  actionButtonMobile: {
+    padding: '14px 16px',
+    fontSize: '15px'
   }
 };
 

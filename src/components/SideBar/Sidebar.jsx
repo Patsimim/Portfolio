@@ -1,70 +1,259 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse, faClipboard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
+// Icon mapping for navigation items
+const getNavigationIcon = (itemId) => {
+  switch (itemId) {
+    case 'home':
+      return faHouse;
+    case 'projects':
+      return faClipboard;
+    case 'contact':
+      return faAddressBook;
+    default:
+      return faHouse;
+  }
+};
 
+const Navigation = ({ items, activeItem, onItemClick, isMobile, closeMobileMenu }) => {
+  const [hoveredItem, setHoveredItem] = useState(null);
 
-const Navigation = ({ items, activeItem, onItemClick }) => (
-  <nav style={styles.navigation} role="navigation" aria-label="Main navigation">
-    {items.map((item) => (
-      <button
-        key={item.id}
-        onClick={() => onItemClick(item.id)}
-        style={{
-          ...styles.navButton,
-          ...(activeItem === item.id ? styles.navButtonActive : styles.navButtonInactive)
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.transform = 'scale(1.05)';
-          if (activeItem !== item.id) {
-            e.target.style.color = '#d1d5db';
-          }
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.transform = 'scale(1)';
-          if (activeItem !== item.id) {
-            e.target.style.color = '#9ca3af';
-          }
-        }}
-        aria-current={activeItem === item.id ? 'page' : undefined}
-      >
-        {item.label}
-      </button>
-    ))}
-  </nav>
-);
+  return (
+    <nav style={styles.navigation} role="navigation" aria-label="Main navigation">
+      {items.map((item) => (
+        <div key={item.id} style={styles.navItemContainer}>
+          <button
+            onClick={() => {
+              onItemClick(item.id);
+              if (isMobile && closeMobileMenu) {
+                closeMobileMenu();
+              }
+            }}
+            style={{
+              ...styles.navButton,
+              ...(activeItem === item.id ? styles.navButtonActive : styles.navButtonInactive),
+              ...(isMobile ? styles.navButtonMobile : styles.navButtonDesktop),
+              // Dynamic width for desktop based on hover state
+              ...(!isMobile && hoveredItem === item.id ? styles.navButtonDesktopExpanded : {})
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                // Don't transform the entire button, just handle color
+                if (activeItem !== item.id) {
+                  e.target.style.color = '#d1d5db';
+                }
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                // Don't transform the entire button, just handle color
+                if (activeItem !== item.id) {
+                  e.target.style.color = '#9ca3af';
+                }
+              }
+            }}
+            aria-current={activeItem === item.id ? 'page' : undefined}
+            aria-label={item.label}
+          >
+            <div style={{
+              ...styles.navButtonContent,
+              ...(isMobile ? {} : styles.navButtonContentDesktop)
+            }}>
+              {/* Desktop: Show icon or text based on hover state */}
+              {!isMobile ? (
+                <div 
+                  style={styles.iconContainer}
+                  onMouseEnter={(e) => {
+                    setHoveredItem(item.id);
+                    e.target.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    setHoveredItem(null);
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  {hoveredItem === item.id ? (
+                    <span style={styles.navTextDesktop}>{item.label}</span>
+                  ) : (
+                    <FontAwesomeIcon 
+                      icon={getNavigationIcon(item.id)} 
+                      style={styles.navIconDesktop}
+                    />
+                  )}
+                </div>
+              ) : (
+                // Mobile: Show both icon and text
+                <>
+                  <FontAwesomeIcon 
+                    icon={getNavigationIcon(item.id)} 
+                    style={styles.navIconMobile}
+                  />
+                  <span style={styles.navTextMobile}>{item.label}</span>
+                </>
+              )}
+            </div>
+          </button>
+        </div>
+      ))}
+    </nav>
+  );
+};
 
-const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => (
-  <aside style={styles.sidebar}>
-    {/* Header */}
-    <div style={styles.header}>
-      <h1 style={styles.title}>
-        {profile.name}
-      </h1>
-      <p style={styles.subtitle}>
-        {profile.title}
-      </p>
-    </div>
+const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-    {/* Top spacer */}
-    <div style={styles.spacerTop}></div>
+  // Check if screen is mobile size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      // Close mobile menu when switching to desktop
+      if (window.innerWidth > 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
 
-    {/* Navigation */}
-    <Navigation 
-      items={navigation} 
-      activeItem={activeItem}
-      onItemClick={onNavigationClick}
-    />
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
-    {/* Bottom spacer with minimum height */}
-    <div style={styles.spacerBottom}></div>
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobile && isMobileMenuOpen && !event.target.closest('.sidebar') && !event.target.closest('.mobile-menu-toggle')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
 
-    {/* Footer */}
-    <footer style={styles.footer}>
-      © {new Date().getFullYear()} {profile.name}
-    </footer>
-  </aside>
-);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobile, isMobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobile && isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobile, isMobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  if (isMobile) {
+    return (
+      <>
+        {/* Mobile Header */}
+        <header style={styles.mobileHeader}>
+          <div style={styles.mobileHeaderContent}>
+            <button 
+              className="mobile-menu-toggle"
+              style={styles.hamburger}
+              onClick={toggleMobileMenu}
+              aria-label="Toggle navigation menu"
+            >
+              <span style={{
+                ...styles.hamburgerLine,
+                transform: isMobileMenuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'
+              }}></span>
+              <span style={{
+                ...styles.hamburgerLine,
+                opacity: isMobileMenuOpen ? '0' : '1'
+              }}></span>
+              <span style={{
+                ...styles.hamburgerLine,
+                transform: isMobileMenuOpen ? 'rotate(-45deg) translate(7px, -6px)' : 'none'
+              }}></span>
+            </button>
+          </div>
+        </header>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div style={styles.mobileOverlay} onClick={closeMobileMenu}>
+            <aside 
+              className="sidebar"
+              style={{
+                ...styles.mobileSidebar,
+                transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Mobile Header */}
+              <div style={styles.mobileMenuHeader}>
+                <h1 style={styles.title}>{profile.name}</h1>
+                <p style={styles.subtitle}>{profile.title}</p>
+              </div>
+
+              {/* Navigation */}
+              <Navigation 
+                items={navigation} 
+                activeItem={activeItem}
+                onItemClick={onNavigationClick}
+                isMobile={true}
+                closeMobileMenu={closeMobileMenu}
+              />
+
+              {/* Footer */}
+              <footer style={styles.mobileFooter}>
+                © {new Date().getFullYear()} {profile.name}
+              </footer>
+            </aside>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  // Desktop sidebar (original design)
+  return (
+    <aside style={styles.sidebar} className="sidebar">
+      {/* Header */}
+      <div style={styles.header}>
+        <h1 style={styles.title}>
+          {profile.name}
+        </h1>
+        <p style={styles.subtitle}>
+          {profile.title}
+        </p>
+      </div>
+
+      {/* Top spacer */}
+      <div style={styles.spacerTop}></div>
+
+      {/* Navigation */}
+      <Navigation 
+        items={navigation} 
+        activeItem={activeItem}
+        onItemClick={onNavigationClick}
+        isMobile={false}
+      />
+
+      {/* Bottom spacer with minimum height */}
+      <div style={styles.spacerBottom}></div>
+
+      {/* Footer */}
+      <footer style={styles.footer}>
+        © {new Date().getFullYear()} {profile.name}
+      </footer>
+    </aside>
+  );
+};
 
 const styles = {
+  // Desktop sidebar styles (keep original)
   sidebar: {
     position: 'fixed',
     left: 0,
@@ -122,6 +311,10 @@ const styles = {
   navButtonInactive: {
     color: '#9ca3af'
   },
+  navButtonMobile: {
+    fontSize: '20px',
+    padding: '12px 16px'
+  },
   spacerBottom: {
     flex: 1,
     minHeight: '80px'
@@ -131,5 +324,201 @@ const styles = {
     color: '#6b7280',
     fontWeight: '300'
   },
+
+  // Mobile styles
+  mobileHeader: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '70px',
+    backgroundColor: 'transparent', 
+    zIndex: 20,
+    display: 'flex',
+    alignItems: 'center',
+    pointerEvents: 'none'
+  },
+  mobileHeaderContent: {
+    display: 'flex',
+    justifyContent: 'flex-end', 
+    alignItems: 'center',
+    width: '100%',
+    padding: '0 20px'
+  },
+  hamburger: {
+    background: 'rgba(0, 0, 0, 0.8)',
+    border: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    width: '48px', 
+    height: '48px',
+    padding: '12px',
+    borderRadius: '8px',
+    pointerEvents: 'auto', 
+    backdropFilter: 'blur(8px)'
+  },
+  hamburgerLine: {
+    display: 'block',
+    height: '2px',
+    width: '100%',
+    backgroundColor: '#ffffff',
+    transformOrigin: '1px',
+    transition: 'all 0.3s ease'
+  },
+  mobileOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 15,
+    backdropFilter: 'blur(2px)' 
+  },
+  mobileSidebar: {
+    position: 'fixed',
+    left: 0, 
+    top: 0,
+    height: '100vh',
+    width: '280px',
+    backgroundColor: '#000000',
+    padding: '32px 24px',
+    display: 'flex',
+    flexDirection: 'column',
+    zIndex: 25,
+    transition: 'transform 0.3s ease',
+    borderRight: '1px solid #333'
+  },
+  mobileMenuHeader: {
+    marginBottom: '40px',
+    paddingTop: '20px'
+  },
+  mobileFooter: {
+    fontSize: '14px',
+    color: '#6b7280',
+    fontWeight: '300',
+    marginTop: 'auto',
+    paddingTop: '20px'
+  },
+
+  // Navigation icon styles
+  navItemContainer: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  navButtonContent: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    width: '100%'
+  },
+  navButtonContentDesktop: {
+    justifyContent: 'flex-start', 
+    gap: 0,
+    width: '100%'
+  },
+  navButtonDesktop: {
+    width: '100%', 
+    height: '64px', 
+    borderRadius: '12px',
+    justifyContent: 'flex-start', 
+    alignItems: 'center',
+    display: 'flex',
+    padding: '8px 16px', 
+    transition: 'all 0.2s ease', 
+    textAlign: 'left' 
+  },
+  iconContainer: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    minWidth: '24px', 
+    height: '24px', 
+    justifyContent: 'center',
+    cursor: 'pointer',
+    transition: 'transform 0.2s ease'
+  },
+  navIcon: {
+    fontSize: '20px',
+    minWidth: '24px',
+    textAlign: 'center'
+  },
+  navIconDesktop: {
+    fontSize: '20px',
+    width: '20px', 
+    height: '20px', 
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  navIconMobile: {
+    fontSize: '24px',
+    minWidth: '32px'
+  },
+  navTextDesktop: {
+    fontSize: '24px', 
+    fontWeight: '400',
+    letterSpacing: '0.025em',
+    animation: 'fadeInText 0.3s ease-in-out'
+  },
+  navTextMobile: {
+    fontSize: '20px',
+    fontWeight: '400',
+    letterSpacing: '0.025em'
+  },
+  tooltip: {
+    position: 'absolute',
+    left: '100%',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    marginLeft: '16px',
+    backgroundColor: '#333',
+    color: '#ffffff',
+    padding: '10px 16px',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontWeight: '400',
+    whiteSpace: 'nowrap',
+    zIndex: 100,
+    pointerEvents: 'none',
+    opacity: 0.95,
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
+    animation: 'fadeIn 0.2s ease-out',
+    border: '1px solid #555'
+  }
 };
+
+// Add CSS for tooltip animation
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-50%) translateX(-5px);
+    }
+    to {
+      opacity: 0.95;
+      transform: translateY(-50%) translateX(0);
+    }
+  }
+  
+  @keyframes fadeInText {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+`;
+if (!document.head.querySelector('style[data-sidebar-styles]')) {
+  styleSheet.setAttribute('data-sidebar-styles', 'true');
+  document.head.appendChild(styleSheet);
+}
+
 export default Sidebar;

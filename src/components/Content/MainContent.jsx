@@ -15,6 +15,18 @@ const MainContent = ({
   // State for current tech stack index
   const [currentStackIndex, setCurrentStackIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if screen is mobile size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // Auto-rotate tech stacks every 3 seconds
   useEffect(() => {
@@ -40,12 +52,18 @@ const MainContent = ({
 
   // Right Content Container
   const RightContentContainer = ({ children, className = "" }) => (
-    <div style={styles.rightContentContainer}>
-      {/* Left side - empty space */}
-      <div style={styles.rightContentSpacer}></div>
+    <div style={{
+      ...styles.rightContentContainer,
+      ...(isMobile ? styles.rightContentContainerMobile : {})
+    }}>
+      {/* Left side - empty space (only on desktop) */}
+      {!isMobile && <div style={styles.rightContentSpacer}></div>}
       
       {/* Right side - content */}
-      <div style={styles.rightContentMain}>
+      <div style={{
+        ...styles.rightContentMain,
+        ...(isMobile ? styles.rightContentMainMobile : {})
+      }}>
         {children}
       </div>
     </div>
@@ -53,24 +71,43 @@ const MainContent = ({
 
   // Home page - About me summary
   const HomePage = () => (
-    <div style={styles.homePage}>
-      <div style={styles.homeContent}>
-        <h2 style={styles.homeTitle}>
+    <div style={{
+      ...styles.homePage,
+      ...(isMobile ? styles.homePageMobile : {})
+    }}>
+      <div style={{
+        ...styles.homeContent,
+        ...(isMobile ? styles.homeContentMobile : {})
+      }}>
+        <h2 style={{
+          ...styles.homeTitle,
+          ...(isMobile ? styles.homeTitleMobile : {})
+        }}>
           About Me
         </h2>
         
         <div style={styles.homeText}>
-          <p style={styles.homeParagraph}>
+          <p style={{
+            ...styles.homeParagraph,
+            ...(isMobile ? styles.homeParagraphMobile : {})
+          }}>
             Fullstack developer crafting digital experiences with clean code and elegant design.
           </p>
         </div>
 
         <div style={styles.expertiseSection}>
-          <div style={styles.techStackContainer}>
-            <div style={styles.techStackWrapper}>
+          <div style={{
+            ...styles.techStackContainer,
+            ...(isMobile ? styles.techStackContainerMobile : {})
+          }}>
+            <div style={{
+              ...styles.techStackWrapper,
+              ...(isMobile ? styles.techStackWrapperMobile : {})
+            }}>
               {techStacks[currentStackIndex].techs.map((tech, index) => (
                 <div key={`${tech.name}-${currentStackIndex}`} style={{
                   ...styles.techItem,
+                  ...(isMobile ? styles.techItemMobile : {}),
                   animationDelay: isTransitioning ? `${index * 0.1}s` : `${index * 0.15}s`,
                   animation: isTransitioning 
                     ? `slideOutToRight 1.2s ease forwards` 
@@ -80,13 +117,19 @@ const MainContent = ({
                   <img 
                     src={tech.image} 
                     alt={tech.name}
-                    style={styles.techImage}
+                    style={{
+                      ...styles.techImage,
+                      ...(isMobile ? styles.techImageMobile : {})
+                    }}
                     onError={(e) => {
                       // Fallback if image fails to load
                       e.target.style.display = 'none';
                     }}
                   />
-                  <span style={styles.techName}>{tech.name}</span>
+                  <span style={{
+                    ...styles.techName,
+                    ...(isMobile ? styles.techNameMobile : {})
+                  }}>{tech.name}</span>
                 </div>
               ))}
             </div>
@@ -100,12 +143,21 @@ const MainContent = ({
   const ContactPage = () => (
     <RightContentContainer>
       <div style={styles.contactContainer}>
-        <div style={styles.contactSections}>
+        <div style={{
+          ...styles.contactSections,
+          ...(isMobile ? styles.contactSectionsMobile : {})
+        }}>
           <div>
-            <h3 style={styles.contactSectionTitle}>Email</h3>
+            <h3 style={{
+              ...styles.contactSectionTitle,
+              ...(isMobile ? styles.contactSectionTitleMobile : {})
+            }}>Email</h3>
             <a 
               href="mailto:rojorusselgem@gmail.com" 
-              style={styles.contactLink}
+              style={{
+                ...styles.contactLink,
+                ...(isMobile ? styles.contactLinkMobile : {})
+              }}
               onMouseEnter={(e) => {
                 e.target.style.color = '#ffffff';
                 e.target.style.transform = 'translateX(8px)';
@@ -120,13 +172,19 @@ const MainContent = ({
           </div>
           
           <div>
-            <h3 style={styles.contactSectionTitle}>Social & Work</h3>
+            <h3 style={{
+              ...styles.contactSectionTitle,
+              ...(isMobile ? styles.contactSectionTitleMobile : {})
+            }}>Social & Work</h3>
             <div>
               <a 
                 href="https://github.com/Patsimim" 
                 target="_blank"
                 rel="noopener noreferrer"
-                style={styles.contactLinkBlock}
+                style={{
+                  ...styles.contactLinkBlock,
+                  ...(isMobile ? styles.contactLinkBlockMobile : {})
+                }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#ffffff';
                   e.target.style.transform = 'translateX(8px)';
@@ -142,7 +200,10 @@ const MainContent = ({
                 href="https://www.linkedin.com/in/russel-gem-rojo-486079355/" 
                 target="_blank"
                 rel="noopener noreferrer"
-                style={styles.contactLinkBlock}
+                style={{
+                  ...styles.contactLinkBlock,
+                  ...(isMobile ? styles.contactLinkBlockMobile : {})
+                }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#ffffff';
                   e.target.style.transform = 'translateX(8px)';
@@ -156,7 +217,10 @@ const MainContent = ({
               </a>
               <a 
                 href="#" 
-                style={styles.contactLinkBlock}
+                style={{
+                  ...styles.contactLinkBlock,
+                  ...(isMobile ? styles.contactLinkBlockMobile : {})
+                }}
                 onMouseEnter={(e) => {
                   e.target.style.color = '#ffffff';
                   e.target.style.transform = 'translateX(8px)';
@@ -172,8 +236,14 @@ const MainContent = ({
           </div>
           
           <div>
-            <h3 style={styles.contactSectionTitle}>Response Time</h3>
-            <p style={styles.contactText}>Usually within 24 hours</p>
+            <h3 style={{
+              ...styles.contactSectionTitle,
+              ...(isMobile ? styles.contactSectionTitleMobile : {})
+            }}>Response Time</h3>
+            <p style={{
+              ...styles.contactText,
+              ...(isMobile ? styles.contactTextMobile : {})
+            }}>Usually within 24 hours</p>
           </div>
         </div>
       </div>
@@ -182,10 +252,13 @@ const MainContent = ({
 
   // Projects page layout
   const ProjectsPage = () => (
-    <div style={styles.projectsPage}>
+    <div style={{
+      ...styles.projectsPage,
+      ...(isMobile ? styles.projectsPageMobile : {})
+    }}>
       <section aria-label="All projects">
         {(projects || []).map((project, index) => (
-          <ProjectCard key={project.id || index} project={project} index={index} />
+          <ProjectCard key={project.id || index} project={project} index={index} isMobile={isMobile} />
         ))}
         
         {(!projects || projects.length === 0) && (
@@ -209,7 +282,10 @@ const MainContent = ({
   };
 
   return (
-    <main style={styles.main}>
+    <main style={{
+      ...styles.main,
+      ...(isMobile ? styles.mainMobile : {})
+    }}>
       {/* Noise texture overlay */}
       <div style={styles.noiseOverlay} />
       
@@ -221,9 +297,10 @@ const MainContent = ({
 };
 
 const styles = {
+  // Desktop styles (keep original)
   main: {
     minHeight: '100vh',
-    paddingLeft: '256px',
+    paddingLeft: '420px', // Adjusted to match sidebar width
     position: 'relative'
   },
   contentContainer: {
@@ -259,13 +336,13 @@ const styles = {
     maxWidth: '512px',
     textAlign: 'center'
   },
-  homeTitle: {
+    homeTitle: {
     fontSize: 'clamp(38px, 8vw, 90px)',
     fontWeight: '100',
     color: '#ffffff',
     marginBottom: '48px',
     letterSpacing: '-0.025em',
-    margin: '0 0 48px 0'
+    textAlign: 'center'
   },
   homeText: {
     marginBottom: '32px'
@@ -377,6 +454,87 @@ const styles = {
   projectsEmpty: {
     color: '#9ca3af',
     fontSize: '18px'
+  },
+
+  // Mobile styles
+  mainMobile: {
+    paddingLeft: '0',
+    paddingTop: '70px' // Account for mobile header
+  },
+  rightContentContainerMobile: {
+    minHeight: 'calc(100vh - 70px)',
+    flexDirection: 'column'
+  },
+  rightContentMainMobile: {
+    width: '100%',
+    padding: '40px 20px',
+    justifyContent: 'flex-start'
+  },
+  homePageMobile: {
+    padding: '40px 20px',
+    minHeight: 'calc(100vh - 70px)',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingTop: '60px'
+  },
+  homeContentMobile: {
+    maxWidth: '100%',
+    textAlign: 'center'
+  },
+  homeTitleMobile: {
+    fontSize: 'clamp(32px, 10vw, 48px)',
+    marginBottom: '32px'
+  },
+  homeParagraphMobile: {
+    fontSize: '16px',
+    textAlign: 'center'
+  },
+  techStackContainerMobile: {
+    minHeight: '120px'
+  },
+  techStackWrapperMobile: {
+    gap: '24px',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  techItemMobile: {
+    gap: '8px'
+  },
+  techImageMobile: {
+    width: '60px',
+    height: '60px'
+  },
+  techNameMobile: {
+    fontSize: '12px'
+  },
+  contactSectionsMobile: {
+    gap: '32px'
+  },
+  contactSectionTitleMobile: {
+    fontSize: '18px',
+    marginBottom: '12px'
+  },
+  contactLinkMobile: {
+    fontSize: '16px'
+  },
+  contactLinkBlockMobile: {
+    fontSize: '16px',
+    marginBottom: '12px'
+  },
+  contactTextMobile: {
+    fontSize: '16px'
+  },
+  projectsPageMobile: {
+    padding: '40px 20px'
+  },
+  noiseOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0.1,
+    pointerEvents: 'none'
   }
 };
 
