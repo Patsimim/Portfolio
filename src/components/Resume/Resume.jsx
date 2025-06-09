@@ -16,7 +16,6 @@ const Resume = () => {
 
   return (
     <div style={styles.container}>
-      {/* Header Controls */}
       <div style={styles.controls}>
         <button
           onClick={handleDownload}
@@ -28,7 +27,6 @@ const Resume = () => {
         </button>
       </div>
 
-      {/* Resume Image - No loading states, no transitions */}
       <div style={styles.resumeContainer}>
         <img
           src={resumeImage}
@@ -164,7 +162,6 @@ const styles = {
   },
 };
 
-// Minimal CSS - only essential styles
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   button:hover {

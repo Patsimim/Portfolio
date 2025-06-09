@@ -443,7 +443,7 @@ const styles = {
     minWidth: "20px",
   },
 
-  // Mobile styles - Updated for better centering
+  // Mobile styles
   articleMobile: {
     marginBottom: "32px",
     display: "flex",

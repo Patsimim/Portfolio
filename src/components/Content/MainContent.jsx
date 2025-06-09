@@ -40,7 +40,6 @@ const MainContent = ({
       }
     };
 
-    // Initial check
     checkScreenSize();
 
     window.addEventListener("resize", checkScreenSize);
@@ -86,8 +85,7 @@ const MainContent = ({
     ),
     [isMobile]
   );
-
-  // Memoize the HomePage component
+  // HomePage component
   const HomePage = useMemo(
     () => (
       <div
@@ -355,7 +353,7 @@ const MainContent = ({
     [isMobile, RightContentContainer]
   );
 
-  // Projects page layout - STABILIZED
+  // Projects page layout
   const ProjectsPage = useMemo(
     () => (
       <div
@@ -427,7 +425,6 @@ const MainContent = ({
   );
 };
 
-// Rest of styles remain the same...
 const styles = {
   // Desktop styles
   main: {
