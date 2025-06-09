@@ -16,13 +16,13 @@ const MainContent = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Currently learning technologies - you can modify this array
+  // Currently learning technologies
   const currentlyLearning = useMemo(
     () => [
-      { name: "Next.js", image: "/images/nextjs.png" },
+      { name: "MongoDB", image: "/images/nextjs.png" },
       { name: "TypeScript", image: "/images/typescript.png" },
-      { name: "Docker", image: "/images/docker.png" },
-      { name: "GraphQL", image: "/images/graphql.png" },
+      { name: "Express.js,", image: "/images/docker.png" },
+      { name: "AWS", image: "/images/graphql.png" },
     ],
     []
   );
