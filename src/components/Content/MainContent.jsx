@@ -21,7 +21,7 @@ const MainContent = ({
     () => [
       { name: "MongoDB", image: "/images/nextjs.png" },
       { name: "TypeScript", image: "/images/typescript.png" },
-      { name: "Express.js,", image: "/images/docker.png" },
+      { name: "Express.js", image: "/images/docker.png" },
       { name: "AWS", image: "/images/graphql.png" },
     ],
     []
@@ -117,10 +117,46 @@ const MainContent = ({
               }}
             >
               I'm a Computer Engineering graduate from Silliman University and a
-              Fullstack Developer willing to serve with dedication to the
-              assigned work. Possessing good work ethics, character and very
-              flexible. Looking to join where the opportunity for growth and
-              personal development is embraced.
+              dedicated Fullstack Developer with strong work ethics,
+              adaptability, and a growth-oriented mindset. I am passionate about
+              delivering high-quality results and committed to continuous
+              learning and improvement.
+            </p>
+            <p
+              style={{
+                ...styles.homeParagraph,
+                ...(isMobile ? styles.homeParagraphMobile : {}),
+              }}
+            >
+              I began my career as a Backend Developer at Buudl, and later
+              transitioned into a Fullstack Developer role as I took on more
+              responsibilities. My experience spans across building web
+              applications using Next.js, mobile apps, admin portals using
+              React, and managing backend services. I've also been entrusted
+              with reviewing team merge requests, and handling deployments for
+              iOS, Android, and web platforms.
+            </p>
+            <p
+              style={{
+                ...styles.homeParagraph,
+                ...(isMobile ? styles.homeParagraphMobile : {}),
+              }}
+            >
+              I'm now seeking a role where I can continue to grow both
+              technically and professionally, contribute meaningfully to the
+              team, and take on new challenges that will help me reach my full
+              potential.
+            </p>
+            <p
+              style={{
+                ...styles.homeParagraph,
+                ...styles.homeParagraphPersonal,
+                ...(isMobile ? styles.homeParagraphMobile : {}),
+              }}
+            >
+              Outside of work, I enjoy watching movies and anime, playing chess,
+              staying active with basketball and jogging, and reading comics
+              —activities that keep me both inspired and balanced.
             </p>
           </div>
 
@@ -461,11 +497,11 @@ const styles = {
     minHeight: "100vh",
   },
   homeContent: {
-    maxWidth: "512px",
+    maxWidth: "600px",
     textAlign: "center",
   },
   homeTitle: {
-    fontSize: "clamp(38px, 8vw, 90px)",
+    fontSize: "clamp(24px, 6vw, 60px)",
     fontWeight: "100",
     color: "#ffffff",
     marginBottom: "48px",
@@ -473,13 +509,22 @@ const styles = {
     textAlign: "center",
   },
   homeText: {
-    marginBottom: "32px",
+    marginBottom: "40px",
   },
   homeParagraph: {
-    fontSize: "clamp(16px, 2vw, 18px)",
+    fontSize: "clamp(14px, 1.6vw, 16px)",
     fontWeight: "300",
-    lineHeight: "1.6",
+    lineHeight: "1.7",
     color: "#d1d5db",
+    marginBottom: "24px",
+  },
+  homeParagraphPersonal: {
+    marginTop: "32px",
+    paddingTop: "24px",
+    borderTop: "1px solid rgba(75, 85, 99, 0.2)",
+    color: "#9ca3af",
+    fontSize: "clamp(14px, 1.6vw, 16px)",
+    fontStyle: "italic",
   },
   expertiseSection: {
     paddingTop: "16px",
@@ -535,7 +580,7 @@ const styles = {
   },
   learningTitle: {
     color: "#ffffff",
-    fontSize: "18px",
+    fontSize: "26",
     fontWeight: "400",
     textAlign: "center",
     marginBottom: "24px",
@@ -669,6 +714,7 @@ const styles = {
   homeParagraphMobile: {
     fontSize: "16px",
     textAlign: "center",
+    marginBottom: "20px",
   },
   techStackContainerMobile: {
     minHeight: "120px",
