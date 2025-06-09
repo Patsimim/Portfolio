@@ -15,29 +15,30 @@ const Portfolio = () => {
     setIsLoading(false);
   };
 
-  // Particle Wave Effect
   useEffect(() => {
-    if (!isLoading && particleContainerRef.current) {
-      // Initialize particle system
+    if (!isLoading && activeItem !== "resume" && particleContainerRef.current) {
       particleSystemRef.current = new ParticleWave(
         particleContainerRef.current
       );
 
       return () => {
-        // Cleanup
         if (particleSystemRef.current) {
           particleSystemRef.current.destroy();
         }
       };
     }
-  }, [isLoading]);
+
+    if (activeItem === "resume" && particleSystemRef.current) {
+      particleSystemRef.current.destroy();
+      particleSystemRef.current = null;
+    }
+  }, [isLoading, activeItem]);
 
   return (
     <div style={styles.container}>
       <style dangerouslySetInnerHTML={{ __html: portfolioStyles }} />
 
-      {/* Particle Wave Background */}
-      {!isLoading && (
+      {!isLoading && activeItem !== "resume" && (
         <div
           ref={particleContainerRef}
           style={styles.particleContainer}
@@ -49,7 +50,6 @@ const Portfolio = () => {
         <OpeningPage onComplete={handleLoadingComplete} />
       ) : (
         <div style={styles.portfolioEnter}>
-          {/* Always show sidebar */}
           <Sidebar
             profile={portfolioData.profile}
             navigation={portfolioData.navigation}
@@ -72,7 +72,6 @@ const Portfolio = () => {
   );
 };
 
-// Particle Wave Class
 class ParticleWave {
   constructor(container) {
     this.container = container;
@@ -87,7 +86,6 @@ class ParticleWave {
   }
 
   init() {
-    // Create particles
     for (let i = 0; i < this.particleCount; i++) {
       this.createParticle(i);
     }
@@ -97,11 +95,9 @@ class ParticleWave {
     const particle = document.createElement("div");
     particle.className = "particle";
 
-    // Random starting positions
     const x = Math.random() * window.innerWidth;
     const y = Math.random() * window.innerHeight;
 
-    // Particle properties
     const size = Math.random() * 2.5 + 0.8;
     const speed = Math.random() * 0.4 + 0.1;
     const amplitude = Math.random() * 80 + 40;
@@ -137,10 +133,9 @@ class ParticleWave {
   }
 
   animate() {
-    this.time += 0.016; // ~60fps
+    this.time += 0.016;
 
     this.particles.forEach((particle, index) => {
-      // Wave motion
       const waveX =
         Math.sin(this.time * particle.frequency + particle.phase) *
         particle.amplitude;
@@ -149,11 +144,9 @@ class ParticleWave {
         particle.amplitude *
         0.4;
 
-      // Drift motion
       particle.baseX += particle.speed;
       particle.baseY += Math.sin(this.time * 0.001 + index) * 0.15;
 
-      // Reset position if out of bounds
       if (particle.baseX > window.innerWidth + 50) {
         particle.baseX = -50;
         particle.baseY = Math.random() * window.innerHeight;
@@ -165,14 +158,11 @@ class ParticleWave {
         particle.baseY = window.innerHeight + 50;
       }
 
-      // Apply wave motion
       particle.x = particle.baseX + waveX;
       particle.y = particle.baseY + waveY;
 
-      // Update particle position
       particle.element.style.transform = `translate3d(${particle.x}px, ${particle.y}px, 0)`;
 
-      // Subtle opacity animation
       const pulseOpacity =
         particle.opacity + Math.sin(this.time * 0.002 + particle.phase) * 0.1;
       particle.element.style.opacity = Math.max(0.05, pulseOpacity);
@@ -183,7 +173,6 @@ class ParticleWave {
 
   handleResize() {
     this.resizeHandler = () => {
-      // Redistribute particles on resize
       this.particles.forEach((particle) => {
         if (particle.baseX > window.innerWidth) {
           particle.baseX = Math.random() * window.innerWidth;
@@ -198,17 +187,14 @@ class ParticleWave {
   }
 
   destroy() {
-    // Cancel animation
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
     }
 
-    // Remove event listeners
     if (this.resizeHandler) {
       window.removeEventListener("resize", this.resizeHandler);
     }
 
-    // Clear particles
     this.particles.forEach((particle) => {
       if (particle.element && particle.element.parentNode) {
         particle.element.parentNode.removeChild(particle.element);

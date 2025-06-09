@@ -4,10 +4,8 @@ const OpeningPage = ({ onComplete }) => {
   const [isDisintegrating, setIsDisintegrating] = useState(false);
 
   useEffect(() => {
-    // Show text for 2 seconds, then start disintegration
     const timer = setTimeout(() => {
       setIsDisintegrating(true);
-      // Complete after disintegration animation finishes
       setTimeout(onComplete, 1500);
     }, 2000);
 
@@ -209,7 +207,6 @@ const OpeningPage = ({ onComplete }) => {
         }}
       />
 
-      {/* Content */}
       <div style={{ textAlign: "center" }}>
         <h1
           className={isDisintegrating ? "text-disintegrate" : ""}
@@ -230,7 +227,6 @@ const OpeningPage = ({ onComplete }) => {
             Russel Rojo Portfolio
           </span>
         </h1>
-        {/* Static electricity sparks */}
         {isDisintegrating && (
           <div
             style={{

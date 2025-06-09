@@ -24,7 +24,6 @@ const ProjectCard = ({ project, index, isMobile }) => {
     setIsHovered(false);
   };
 
-  // Helper function to get platform icons
   const getPlatformIcon = (platform) => {
     switch (platform.toLowerCase()) {
       case "android":
@@ -38,7 +37,6 @@ const ProjectCard = ({ project, index, isMobile }) => {
     }
   };
 
-  // Prevent body scroll when modal is open
   useEffect(() => {
     if (isModalOpen) {
       document.body.style.overflow = "hidden";
@@ -107,7 +105,6 @@ const ProjectCard = ({ project, index, isMobile }) => {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               style={{
                 ...styles.closeButton,
@@ -437,7 +434,7 @@ const styles = {
     marginBottom: "32px",
     justifyContent: "center",
     textAlign: "center",
-    transform: "none !important", // Disable transform on mobile for better performance
+    transform: "none !important",
   },
   projectInfoMobile: {
     textAlign: "center",

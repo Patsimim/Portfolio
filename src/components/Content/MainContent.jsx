@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
+import Resume from "../Resume/Resume";
 import { techStacks } from "../../data/techStacks";
 
 const MainContent = ({
@@ -11,12 +12,10 @@ const MainContent = ({
   navigation,
   onNavigationClick,
 }) => {
-  // State for current tech stack index
   const [currentStackIndex, setCurrentStackIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if screen is mobile size
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -27,7 +26,6 @@ const MainContent = ({
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // Auto-rotate tech stacks every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setIsTransitioning(true);
@@ -37,19 +35,12 @@ const MainContent = ({
           prevIndex === techStacks.length - 1 ? 0 : prevIndex + 1
         );
         setIsTransitioning(false);
-      }, 1200); // Match the slower exit transition duration
+      }, 1200);
     }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // Get current page title
-  const getCurrentPageTitle = () => {
-    const currentNav = navigation.find((nav) => nav.id === activeItem);
-    return currentNav ? currentNav.label : "Home";
-  };
-
-  // Right Content Container
   const RightContentContainer = ({ children, className = "" }) => (
     <div
       style={{
@@ -57,10 +48,7 @@ const MainContent = ({
         ...(isMobile ? styles.rightContentContainerMobile : {}),
       }}
     >
-      {/* Left side - empty space (only on desktop) */}
       {!isMobile && <div style={styles.rightContentSpacer}></div>}
-
-      {/* Right side - content */}
       <div
         style={{
           ...styles.rightContentMain,
@@ -102,7 +90,7 @@ const MainContent = ({
               ...(isMobile ? styles.homeParagraphMobile : {}),
             }}
           >
-            I’m a Computer Engineering graduate from Silliman University and a
+            I'm a Computer Engineering graduate from Silliman University and a
             Fullstack Developer willing to serve with dedication to the assigned
             work. Possessing good work ethics, character and very flexible.
             Looking to join where the opportunity for growth and personal
@@ -146,7 +134,6 @@ const MainContent = ({
                       ...(isMobile ? styles.techImageMobile : {}),
                     }}
                     onError={(e) => {
-                      // Fallback if image fails to load
                       e.target.style.display = "none";
                     }}
                   />
@@ -321,6 +308,18 @@ const MainContent = ({
     </div>
   );
 
+  // Resume page
+  const ResumePage = () => (
+    <div
+      style={{
+        ...styles.resumePage,
+        ...(isMobile ? styles.resumePageMobile : {}),
+      }}
+    >
+      <Resume />
+    </div>
+  );
+
   const renderContent = () => {
     switch (activeItem) {
       case "home":
@@ -329,6 +328,8 @@ const MainContent = ({
         return <ProjectsPage />;
       case "contact":
         return <ContactPage />;
+      case "resume":
+        return <ResumePage />;
       default:
         return <HomePage />;
     }
@@ -341,7 +342,6 @@ const MainContent = ({
         ...(isMobile ? styles.mainMobile : {}),
       }}
     >
-      {/* Noise texture overlay */}
       <div style={styles.noiseOverlay} />
 
       <div style={styles.contentContainer}>{renderContent()}</div>
@@ -507,6 +507,12 @@ const styles = {
     color: "#9ca3af",
     fontSize: "18px",
   },
+  // Resume Page Styles
+  resumePage: {
+    padding: "0",
+    minHeight: "100vh",
+    width: "100%",
+  },
 
   // Mobile styles
   mainMobile: {
@@ -578,6 +584,10 @@ const styles = {
   },
   projectsPageMobile: {
     padding: "40px 20px",
+  },
+  resumePageMobile: {
+    padding: "0",
+    width: "100%",
   },
   noiseOverlay: {
     position: "absolute",

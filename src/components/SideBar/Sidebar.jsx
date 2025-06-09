@@ -4,9 +4,9 @@ import {
   faHouse,
   faClipboard,
   faAddressBook,
+  faFileText,
 } from "@fortawesome/free-solid-svg-icons";
 
-// Icon mapping for navigation items
 const getNavigationIcon = (itemId) => {
   switch (itemId) {
     case "home":
@@ -15,6 +15,8 @@ const getNavigationIcon = (itemId) => {
       return faClipboard;
     case "contact":
       return faAddressBook;
+    case "resume":
+      return faFileText;
     default:
       return faHouse;
   }
@@ -50,14 +52,12 @@ const Navigation = ({
                 ? styles.navButtonActive
                 : styles.navButtonInactive),
               ...(isMobile ? styles.navButtonMobile : styles.navButtonDesktop),
-              // Dynamic width for desktop based on hover state
               ...(!isMobile && hoveredItem === item.id
                 ? styles.navButtonDesktopExpanded
                 : {}),
             }}
             onMouseEnter={(e) => {
               if (!isMobile) {
-                // Don't transform the entire button, just handle color
                 if (activeItem !== item.id) {
                   e.target.style.color = "#d1d5db";
                 }
@@ -65,7 +65,6 @@ const Navigation = ({
             }}
             onMouseLeave={(e) => {
               if (!isMobile) {
-                // Don't transform the entire button, just handle color
                 if (activeItem !== item.id) {
                   e.target.style.color = "#9ca3af";
                 }
@@ -80,7 +79,6 @@ const Navigation = ({
                 ...(isMobile ? {} : styles.navButtonContentDesktop),
               }}
             >
-              {/* Desktop: Show icon or text based on hover state */}
               {!isMobile ? (
                 <div
                   style={styles.iconContainer}
@@ -103,7 +101,6 @@ const Navigation = ({
                   )}
                 </div>
               ) : (
-                // Mobile: Show both icon and text
                 <>
                   <FontAwesomeIcon
                     icon={getNavigationIcon(item.id)}
@@ -124,11 +121,9 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if screen is mobile size
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth <= 768);
-      // Close mobile menu when switching to desktop
       if (window.innerWidth > 768) {
         setIsMobileMenuOpen(false);
       }
@@ -139,7 +134,6 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -156,7 +150,6 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobile, isMobileMenuOpen]);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobile && isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -254,7 +247,7 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
     );
   }
 
-  // Desktop sidebar (original design)
+  // Desktop sidebar
   return (
     <aside style={styles.sidebar} className='sidebar'>
       {/* Header */}
@@ -274,7 +267,6 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
         isMobile={false}
       />
 
-      {/* Bottom spacer with minimum height */}
       <div style={styles.spacerBottom}></div>
 
       {/* Footer */}
@@ -286,7 +278,7 @@ const Sidebar = ({ profile, navigation, activeItem, onNavigationClick }) => {
 };
 
 const styles = {
-  // Desktop sidebar styles (keep original)
+  // Desktop sidebar styles
   sidebar: {
     position: "fixed",
     left: 0,
@@ -537,35 +529,5 @@ const styles = {
     border: "1px solid #555",
   },
 };
-
-// Add CSS for tooltip animation
-const styleSheet = document.createElement("style");
-styleSheet.innerText = `
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-50%) translateX(-5px);
-    }
-    to {
-      opacity: 0.95;
-      transform: translateY(-50%) translateX(0);
-    }
-  }
-  
-  @keyframes fadeInText {
-    from {
-      opacity: 0;
-      transform: translateX(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-`;
-if (!document.head.querySelector("style[data-sidebar-styles]")) {
-  styleSheet.setAttribute("data-sidebar-styles", "true");
-  document.head.appendChild(styleSheet);
-}
 
 export default Sidebar;
