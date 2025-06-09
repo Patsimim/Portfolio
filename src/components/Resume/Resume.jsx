@@ -42,9 +42,7 @@ const Resume = () => {
         <h2 style={styles.infoTitle}>About This Resume</h2>
         <p style={styles.infoText}>
           This resume is displayed as an image for optimal viewing and is
-          available for download in PDF format. The PDF includes my complete
-          professional experience, education, and skills in a printer-friendly
-          format.
+          available for download in PDF format.
         </p>
 
         <div style={styles.quickSummary}>
@@ -54,7 +52,8 @@ const Resume = () => {
               Computer Engineering graduate from Silliman University
             </li>
             <li style={styles.summaryItem}>
-              Proficient in React, Node.js, and modern web technologies
+              Proficient in React, Node.js, React Native, Laravel, NextJS and
+              MySQL
             </li>
             <li style={styles.summaryItem}>
               Strong background in full-stack development

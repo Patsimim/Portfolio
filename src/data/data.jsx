@@ -1,5 +1,6 @@
 import BuudlLogo from "../assets/image/Buudl.png";
 import SeniorAppLogo from "../assets/image/SeniorCare.png";
+import GlobalChatLogo from "../assets/image/GlobalChat.png";
 
 export const portfolioData = {
   profile: {
@@ -48,7 +49,7 @@ export const portfolioData = {
       category: "Fullstack Developer",
       designer: "Russel Gem O Rojo",
       description:
-        "Healthcare application designed for senior care management with features for medication tracking, appointment scheduling, emergency contacts, and health monitoring.",
+        "Healthcare application designed for senior care management with features for hospital tracking, appointment scheduling, emergency contacts, and health monitoring.",
       image: SeniorAppLogo,
       technologies: ["React Native", "Laravel"],
       viewLive: null,
@@ -60,8 +61,8 @@ export const portfolioData = {
       category: "Fullstack Developer",
       designer: "Russel Gem O Rojo",
       description:
-        "Modern corporate website and internal management system with CMS functionality, employee portal, and business analytics dashboard.",
-      image: null,
+        "Real-time chat web application that allows users to create an account and instantly engage in conversations.",
+      image: GlobalChatLogo,
       technologies: ["React Native", "Laravel"],
       viewLive: null,
     },

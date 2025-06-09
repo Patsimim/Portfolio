@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import Resume from "../Resume/Resume";
 import { techStacks } from "../../data/techStacks";
@@ -16,15 +16,39 @@ const MainContent = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Currently learning technologies - you can modify this array
+  const currentlyLearning = useMemo(
+    () => [
+      { name: "Next.js", image: "/images/nextjs.png" },
+      { name: "TypeScript", image: "/images/typescript.png" },
+      { name: "Docker", image: "/images/docker.png" },
+      { name: "GraphQL", image: "/images/graphql.png" },
+    ],
+    []
+  );
+
   useEffect(() => {
+    let timeoutId;
+
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const newIsMobile = window.innerWidth <= 768;
+      if (newIsMobile !== isMobile) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          setIsMobile(newIsMobile);
+        }, 100);
+      }
     };
 
+    // Initial check
     checkScreenSize();
+
     window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+      clearTimeout(timeoutId);
+    };
+  }, [isMobile]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,174 +65,189 @@ const MainContent = ({
     return () => clearInterval(interval);
   }, []);
 
-  const RightContentContainer = ({ children, className = "" }) => (
-    <div
-      style={{
-        ...styles.rightContentContainer,
-        ...(isMobile ? styles.rightContentContainerMobile : {}),
-      }}
-    >
-      {!isMobile && <div style={styles.rightContentSpacer}></div>}
+  const RightContentContainer = useCallback(
+    ({ children, className = "" }) => (
       <div
         style={{
-          ...styles.rightContentMain,
-          ...(isMobile ? styles.rightContentMainMobile : {}),
+          ...styles.rightContentContainer,
+          ...(isMobile ? styles.rightContentContainerMobile : {}),
         }}
       >
-        {children}
-      </div>
-    </div>
-  );
-
-  // Home page - About me summary
-  const HomePage = () => (
-    <div
-      style={{
-        ...styles.homePage,
-        ...(isMobile ? styles.homePageMobile : {}),
-      }}
-    >
-      <div
-        style={{
-          ...styles.homeContent,
-          ...(isMobile ? styles.homeContentMobile : {}),
-        }}
-      >
-        <h2
+        {!isMobile && <div style={styles.rightContentSpacer}></div>}
+        <div
           style={{
-            ...styles.homeTitle,
-            ...(isMobile ? styles.homeTitleMobile : {}),
+            ...styles.rightContentMain,
+            ...(isMobile ? styles.rightContentMainMobile : {}),
           }}
         >
-          About Me
-        </h2>
-
-        <div style={styles.homeText}>
-          <p
-            style={{
-              ...styles.homeParagraph,
-              ...(isMobile ? styles.homeParagraphMobile : {}),
-            }}
-          >
-            I'm a Computer Engineering graduate from Silliman University and a
-            Fullstack Developer willing to serve with dedication to the assigned
-            work. Possessing good work ethics, character and very flexible.
-            Looking to join where the opportunity for growth and personal
-            development is embraced.
-          </p>
+          {children}
         </div>
+      </div>
+    ),
+    [isMobile]
+  );
 
-        <div style={styles.expertiseSection}>
-          <div
+  // Memoize the HomePage component
+  const HomePage = useMemo(
+    () => (
+      <div
+        style={{
+          ...styles.homePage,
+          ...(isMobile ? styles.homePageMobile : {}),
+        }}
+      >
+        <div
+          style={{
+            ...styles.homeContent,
+            ...(isMobile ? styles.homeContentMobile : {}),
+          }}
+        >
+          <h2
             style={{
-              ...styles.techStackContainer,
-              ...(isMobile ? styles.techStackContainerMobile : {}),
+              ...styles.homeTitle,
+              ...(isMobile ? styles.homeTitleMobile : {}),
             }}
           >
-            <div
+            About Me
+          </h2>
+
+          <div style={styles.homeText}>
+            <p
               style={{
-                ...styles.techStackWrapper,
-                ...(isMobile ? styles.techStackWrapperMobile : {}),
+                ...styles.homeParagraph,
+                ...(isMobile ? styles.homeParagraphMobile : {}),
               }}
             >
-              {techStacks[currentStackIndex].techs.map((tech, index) => (
-                <div
-                  key={`${tech.name}-${currentStackIndex}`}
-                  style={{
-                    ...styles.techItem,
-                    ...(isMobile ? styles.techItemMobile : {}),
-                    animationDelay: isTransitioning
-                      ? `${index * 0.1}s`
-                      : `${index * 0.15}s`,
-                    animation: isTransitioning
-                      ? `slideOutToRight 1.2s ease forwards`
-                      : `slideInFromLeft 0.8s ease forwards`,
-                    animationFillMode: "forwards",
-                  }}
-                >
-                  <img
-                    src={tech.image}
-                    alt={tech.name}
+              I'm a Computer Engineering graduate from Silliman University and a
+              Fullstack Developer willing to serve with dedication to the
+              assigned work. Possessing good work ethics, character and very
+              flexible. Looking to join where the opportunity for growth and
+              personal development is embraced.
+            </p>
+          </div>
+
+          <div style={styles.expertiseSection}>
+            <div
+              style={{
+                ...styles.techStackContainer,
+                ...(isMobile ? styles.techStackContainerMobile : {}),
+              }}
+            >
+              <div
+                style={{
+                  ...styles.techStackWrapper,
+                  ...(isMobile ? styles.techStackWrapperMobile : {}),
+                }}
+              >
+                {techStacks[currentStackIndex].techs.map((tech, index) => (
+                  <div
+                    key={`${tech.name}-${currentStackIndex}`}
                     style={{
-                      ...styles.techImage,
-                      ...(isMobile ? styles.techImageMobile : {}),
-                    }}
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
-                  <span
-                    style={{
-                      ...styles.techName,
-                      ...(isMobile ? styles.techNameMobile : {}),
+                      ...styles.techItem,
+                      ...(isMobile ? styles.techItemMobile : {}),
+                      animationDelay: isTransitioning
+                        ? `${index * 0.1}s`
+                        : `${index * 0.15}s`,
+                      animation: isTransitioning
+                        ? `slideOutToRight 1.2s ease forwards`
+                        : `slideInFromLeft 0.8s ease forwards`,
+                      animationFillMode: "forwards",
                     }}
                   >
-                    {tech.name}
-                  </span>
+                    <img
+                      src={tech.image}
+                      alt={tech.name}
+                      style={{
+                        ...styles.techImage,
+                        ...(isMobile ? styles.techImageMobile : {}),
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                    <span
+                      style={{
+                        ...styles.techName,
+                        ...(isMobile ? styles.techNameMobile : {}),
+                      }}
+                    >
+                      {tech.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Currently Learning Section */}
+          <div style={styles.learningSection}>
+            <h3
+              style={{
+                ...styles.learningTitle,
+                ...(isMobile ? styles.learningTitleMobile : {}),
+              }}
+            >
+              Currently Learning
+            </h3>
+            <div
+              style={{
+                ...styles.learningContainer,
+                ...(isMobile ? styles.learningContainerMobile : {}),
+              }}
+            >
+              {currentlyLearning.map((tech, index) => (
+                <div
+                  key={tech.name}
+                  style={{
+                    ...styles.learningItem,
+                    ...(isMobile ? styles.learningItemMobile : {}),
+                  }}
+                >
+                  <div style={styles.learningItemInner}>
+                    <span
+                      style={{
+                        ...styles.learningName,
+                        ...(isMobile ? styles.learningNameMobile : {}),
+                      }}
+                    >
+                      {tech.name}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
+    [isMobile, currentStackIndex, isTransitioning, currentlyLearning]
   );
 
   // Contact page content
-  const ContactPage = () => (
-    <RightContentContainer>
-      <div style={styles.contactContainer}>
-        <div
-          style={{
-            ...styles.contactSections,
-            ...(isMobile ? styles.contactSectionsMobile : {}),
-          }}
-        >
-          <div>
-            <h3
-              style={{
-                ...styles.contactSectionTitle,
-                ...(isMobile ? styles.contactSectionTitleMobile : {}),
-              }}
-            >
-              Email
-            </h3>
-            <a
-              href='mailto:rojorusselgem@gmail.com'
-              style={{
-                ...styles.contactLink,
-                ...(isMobile ? styles.contactLinkMobile : {}),
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.color = "#ffffff";
-                e.target.style.transform = "translateX(8px)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = "#d1d5db";
-                e.target.style.transform = "translateX(0)";
-              }}
-            >
-              rojorusselgem@gmail.com
-            </a>
-          </div>
-
-          <div>
-            <h3
-              style={{
-                ...styles.contactSectionTitle,
-                ...(isMobile ? styles.contactSectionTitleMobile : {}),
-              }}
-            >
-              Social & Work
-            </h3>
+  const ContactPage = useMemo(
+    () => (
+      <RightContentContainer>
+        <div style={styles.contactContainer}>
+          <div
+            style={{
+              ...styles.contactSections,
+              ...(isMobile ? styles.contactSectionsMobile : {}),
+            }}
+          >
             <div>
-              <a
-                href='https://github.com/Patsimim'
-                target='_blank'
-                rel='noopener noreferrer'
+              <h3
                 style={{
-                  ...styles.contactLinkBlock,
-                  ...(isMobile ? styles.contactLinkBlockMobile : {}),
+                  ...styles.contactSectionTitle,
+                  ...(isMobile ? styles.contactSectionTitleMobile : {}),
+                }}
+              >
+                Email
+              </h3>
+              <a
+                href='mailto:rojorusselgem@gmail.com'
+                style={{
+                  ...styles.contactLink,
+                  ...(isMobile ? styles.contactLinkMobile : {}),
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = "#ffffff";
@@ -219,121 +258,160 @@ const MainContent = ({
                   e.target.style.transform = "translateX(0)";
                 }}
               >
-                GitHub ↗
-              </a>
-              <a
-                href='https://www.linkedin.com/in/russel-gem-rojo-486079355/'
-                target='_blank'
-                rel='noopener noreferrer'
-                style={{
-                  ...styles.contactLinkBlock,
-                  ...(isMobile ? styles.contactLinkBlockMobile : {}),
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.color = "#ffffff";
-                  e.target.style.transform = "translateX(8px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.color = "#d1d5db";
-                  e.target.style.transform = "translateX(0)";
-                }}
-              >
-                LinkedIn ↗
-              </a>
-              <a
-                href='#'
-                style={{
-                  ...styles.contactLinkBlock,
-                  ...(isMobile ? styles.contactLinkBlockMobile : {}),
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.color = "#ffffff";
-                  e.target.style.transform = "translateX(8px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.color = "#d1d5db";
-                  e.target.style.transform = "translateX(0)";
-                }}
-              >
-                Portfolio ↗
+                rojorusselgem@gmail.com
               </a>
             </div>
-          </div>
 
-          <div>
-            <h3
-              style={{
-                ...styles.contactSectionTitle,
-                ...(isMobile ? styles.contactSectionTitleMobile : {}),
-              }}
-            >
-              Response Time
-            </h3>
-            <p
-              style={{
-                ...styles.contactText,
-                ...(isMobile ? styles.contactTextMobile : {}),
-              }}
-            >
-              Usually within 24 hours
-            </p>
+            <div>
+              <h3
+                style={{
+                  ...styles.contactSectionTitle,
+                  ...(isMobile ? styles.contactSectionTitleMobile : {}),
+                }}
+              >
+                Social & Work
+              </h3>
+              <div>
+                <a
+                  href='https://github.com/Patsimim'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  style={{
+                    ...styles.contactLinkBlock,
+                    ...(isMobile ? styles.contactLinkBlockMobile : {}),
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = "#ffffff";
+                    e.target.style.transform = "translateX(8px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = "#d1d5db";
+                    e.target.style.transform = "translateX(0)";
+                  }}
+                >
+                  GitHub ↗
+                </a>
+                <a
+                  href='https://www.linkedin.com/in/russel-gem-rojo-486079355/'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  style={{
+                    ...styles.contactLinkBlock,
+                    ...(isMobile ? styles.contactLinkBlockMobile : {}),
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = "#ffffff";
+                    e.target.style.transform = "translateX(8px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = "#d1d5db";
+                    e.target.style.transform = "translateX(0)";
+                  }}
+                >
+                  LinkedIn ↗
+                </a>
+                <a
+                  href='#'
+                  style={{
+                    ...styles.contactLinkBlock,
+                    ...(isMobile ? styles.contactLinkBlockMobile : {}),
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = "#ffffff";
+                    e.target.style.transform = "translateX(8px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = "#d1d5db";
+                    e.target.style.transform = "translateX(0)";
+                  }}
+                >
+                  Portfolio ↗
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <h3
+                style={{
+                  ...styles.contactSectionTitle,
+                  ...(isMobile ? styles.contactSectionTitleMobile : {}),
+                }}
+              >
+                Response Time
+              </h3>
+              <p
+                style={{
+                  ...styles.contactText,
+                  ...(isMobile ? styles.contactTextMobile : {}),
+                }}
+              >
+                Usually within 24 hours
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </RightContentContainer>
+      </RightContentContainer>
+    ),
+    [isMobile, RightContentContainer]
   );
 
-  // Projects page layout
-  const ProjectsPage = () => (
-    <div
-      style={{
-        ...styles.projectsPage,
-        ...(isMobile ? styles.projectsPageMobile : {}),
-      }}
-    >
-      <section aria-label='All projects'>
-        {(projects || []).map((project, index) => (
-          <ProjectCard
-            key={project.id || index}
-            project={project}
-            index={index}
-            isMobile={isMobile}
-          />
-        ))}
+  // Projects page layout - STABILIZED
+  const ProjectsPage = useMemo(
+    () => (
+      <div
+        style={{
+          ...styles.projectsPage,
+          ...(isMobile ? styles.projectsPageMobile : {}),
+        }}
+      >
+        <section aria-label='All projects'>
+          {(projects || []).map((project, index) => (
+            <ProjectCard
+              key={`${project.id || index}-${project.title}`} // More stable key
+              project={project}
+              index={index}
+              isMobile={isMobile}
+            />
+          ))}
 
-        {(!projects || projects.length === 0) && (
-          <p style={styles.projectsEmpty}>No projects available.</p>
-        )}
-      </section>
-    </div>
+          {(!projects || projects.length === 0) && (
+            <p style={styles.projectsEmpty}>No projects available.</p>
+          )}
+        </section>
+      </div>
+    ),
+    [projects, isMobile]
   );
 
   // Resume page
-  const ResumePage = () => (
-    <div
-      style={{
-        ...styles.resumePage,
-        ...(isMobile ? styles.resumePageMobile : {}),
-      }}
-    >
-      <Resume />
-    </div>
+  const ResumePage = useMemo(
+    () => (
+      <div
+        style={{
+          ...styles.resumePage,
+          ...(isMobile ? styles.resumePageMobile : {}),
+        }}
+      >
+        <Resume />
+      </div>
+    ),
+    [isMobile]
   );
 
-  const renderContent = () => {
+  const renderContent = useCallback(() => {
     switch (activeItem) {
       case "home":
-        return <HomePage />;
+        return HomePage;
       case "projects":
-        return <ProjectsPage />;
+        return ProjectsPage;
       case "contact":
-        return <ContactPage />;
+        return ContactPage;
       case "resume":
-        return <ResumePage />;
+        return ResumePage;
       default:
-        return <HomePage />;
+        return HomePage;
     }
-  };
+  }, [activeItem, HomePage, ProjectsPage, ContactPage, ResumePage]);
 
   return (
     <main
@@ -349,6 +427,7 @@ const MainContent = ({
   );
 };
 
+// Rest of styles remain the same...
 const styles = {
   // Desktop styles
   main: {
@@ -407,6 +486,7 @@ const styles = {
   },
   expertiseSection: {
     paddingTop: "16px",
+    marginBottom: "48px",
   },
   expertiseTitle: {
     color: "#ffffff",
@@ -450,6 +530,52 @@ const styles = {
     fontWeight: "300",
     textAlign: "center",
   },
+
+  // Currently Learning Styles - COMPLETELY STATIC
+  learningSection: {
+    paddingTop: "32px",
+    borderTop: "1px solid rgba(75, 85, 99, 0.3)",
+  },
+  learningTitle: {
+    color: "#ffffff",
+    fontSize: "18px",
+    fontWeight: "400",
+    textAlign: "center",
+    marginBottom: "24px",
+    opacity: 0.9,
+  },
+  learningContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "32px",
+    flexWrap: "wrap",
+  },
+  learningItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    opacity: 1,
+  },
+  learningItemInner: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "8px",
+    padding: "16px",
+    border: "1px solid rgba(75, 85, 99, 0.2)",
+    borderRadius: "12px",
+    backgroundColor: "rgba(17, 24, 39, 0.3)",
+    backdropFilter: "blur(8px)",
+    cursor: "default",
+  },
+  learningName: {
+    color: "#9ca3af",
+    fontSize: "14px",
+    fontWeight: "300",
+    textAlign: "center",
+  },
+
   // Contact Page Styles
   contactContainer: {
     display: "flex",
@@ -565,6 +691,23 @@ const styles = {
   techNameMobile: {
     fontSize: "12px",
   },
+
+  // Mobile Learning Styles
+  learningTitleMobile: {
+    fontSize: "16px",
+    marginBottom: "20px",
+  },
+  learningContainerMobile: {
+    gap: "20px",
+  },
+  learningItemMobile: {
+    flex: "0 1 calc(50% - 10px)",
+    minWidth: "120px",
+  },
+  learningNameMobile: {
+    fontSize: "13px",
+  },
+
   contactSectionsMobile: {
     gap: "32px",
   },
@@ -632,6 +775,15 @@ styleSheet.innerText = `
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
     }
   }
 `;

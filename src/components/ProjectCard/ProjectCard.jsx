@@ -17,11 +17,15 @@ const ProjectCard = ({ project, index, isMobile }) => {
   };
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    if (!isMobile) {
+      setIsHovered(true);
+    }
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    if (!isMobile) {
+      setIsHovered(false);
+    }
   };
 
   const getPlatformIcon = (platform) => {
@@ -55,13 +59,22 @@ const ProjectCard = ({ project, index, isMobile }) => {
         style={{
           ...styles.article,
           ...(isMobile ? styles.articleMobile : {}),
-          transform: isHovered ? "translateX(-8px)" : "translateX(0)",
+          transform: isMobile
+            ? "none"
+            : isHovered
+              ? "translateX(-8px)"
+              : "translateX(0)",
         }}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div style={styles.projectContent}>
+        <div
+          style={{
+            ...styles.projectContent,
+            ...(isMobile ? styles.projectContentMobile : {}),
+          }}
+        >
           <div
             style={{
               ...styles.projectInfo,
@@ -322,6 +335,7 @@ const styles = {
     overflowY: "auto",
     position: "relative",
     border: "1px solid #333",
+    top: 40,
   },
   closeButton: {
     position: "absolute",
@@ -429,21 +443,37 @@ const styles = {
     minWidth: "20px",
   },
 
-  // Mobile styles
+  // Mobile styles - Updated for better centering
   articleMobile: {
     marginBottom: "32px",
+    display: "flex",
     justifyContent: "center",
+    alignItems: "center",
     textAlign: "center",
-    transform: "none !important",
+    width: "100%",
+  },
+  projectContentMobile: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    textAlign: "center",
   },
   projectInfoMobile: {
     textAlign: "center",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   titleMobile: {
     fontSize: "clamp(24px, 8vw, 36px)",
+    textAlign: "center",
   },
   metaMobile: {
     fontSize: "13px",
+    textAlign: "center",
   },
   modalOverlayMobile: {
     padding: "10px",
@@ -487,6 +517,7 @@ const styles = {
   techStackMobile: {
     gap: "6px",
     marginBottom: "20px",
+    justifyContent: "center",
   },
   techTagMobile: {
     padding: "3px 8px",

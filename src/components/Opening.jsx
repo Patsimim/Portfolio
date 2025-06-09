@@ -224,7 +224,7 @@ const OpeningPage = ({ onComplete }) => {
           }}
         >
           <span className={isDisintegrating ? "electric-flicker" : ""}>
-            Russel Rojo Portfolio
+            Russel Rojo <strong>Portfolio</strong>
           </span>
         </h1>
         {isDisintegrating && (
