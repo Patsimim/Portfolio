@@ -19,10 +19,10 @@ const MainContent = ({
   // Currently learning technologies
   const currentlyLearning = useMemo(
     () => [
-      { name: "MongoDB", image: "/images/nextjs.png" },
-      { name: "TypeScript", image: "/images/typescript.png" },
-      { name: "Express.js", image: "/images/docker.png" },
-      { name: "AWS", image: "/images/graphql.png" },
+      { name: "MongoDB", image: null },
+      { name: "Angular", image: null },
+      { name: "Express.js", image: null },
+      { name: "AWS", image: null },
     ],
     []
   );
