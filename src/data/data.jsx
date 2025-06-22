@@ -52,19 +52,31 @@ export const portfolioData = {
         "Healthcare application designed for senior care management with features for hospital tracking, appointment scheduling, emergency contacts, and health monitoring.",
       image: SeniorAppLogo,
       technologies: ["React Native", "Laravel"],
-      viewLive: null,
+      viewLive: [
+        {
+          platform: "Github",
+          url: "https://github.com/Patsimim/SeniorCareApp/tree/main",
+          label: "Github",
+        },
+      ],
     },
     {
       id: 3,
-      title: "Blue Beans Inc.",
+      title: "GlobalChat",
       date: "Mar. - Apr. 2025",
       category: "Fullstack Developer",
       designer: "Russel Gem O Rojo",
       description:
-        "Real-time chat web application that allows users to create an account and instantly engage in conversations.",
+        "GlobalChat is a real-time chat web application that lets users create an account and instantly connect with people around the world. Engage in seamless, live conversations across borders with ease and simplicity.",
       image: GlobalChatLogo,
       technologies: ["React Native", "Laravel"],
-      viewLive: null,
+      viewLive: [
+        {
+          platform: "Github",
+          url: "https://github.com/Patsimim/GlobalChat/tree/master",
+          label: "Github",
+        },
+      ],
     },
   ],
 };
