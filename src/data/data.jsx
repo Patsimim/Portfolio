@@ -69,12 +69,19 @@ export const portfolioData = {
       description:
         "GlobalChat is a real-time chat web application that lets users create an account and instantly connect with people around the world. Engage in seamless, live conversations across borders with ease and simplicity.",
       image: GlobalChatLogo,
-      technologies: ["React Native", "Laravel"],
+      technologies: [
+        "Originally developed React Native and Laravel, rebuilt using MEAN stack",
+      ],
       viewLive: [
         {
           platform: "Github",
           url: "https://github.com/Patsimim/GlobalChat/tree/master",
-          label: "Github",
+          label: "Github (Frontend)",
+        },
+        {
+          platform: "Github",
+          url: "https://github.com/Patsimim/globalchatbackend/tree/master",
+          label: "Github (Backend)",
         },
       ],
     },
