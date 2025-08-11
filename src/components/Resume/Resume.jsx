@@ -1,8 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import resumePdf from "../Resume/resume.pdf";
-import resumeImage from "../Resume/Resume.jpg";
+import resumePdf from "../Resume/Rojo_resume.pdf";
+import resumeImage from "../Resume/Resume.png";
 
 const Resume = () => {
   const handleDownload = () => {
