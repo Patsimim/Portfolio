@@ -122,7 +122,7 @@ const MainContent = ({
               delivering high-quality results and committed to continuous
               learning and improvement.
             </p>
-            <p
+            {/* <p
               style={{
                 ...styles.homeParagraph,
                 ...(isMobile ? styles.homeParagraphMobile : {}),
@@ -135,7 +135,7 @@ const MainContent = ({
               React, and managing backend services. I've also been entrusted
               with reviewing team merge requests, and handling deployments for
               iOS, Android, and web platforms.
-            </p>
+            </p> */}
             <p
               style={{
                 ...styles.homeParagraph,

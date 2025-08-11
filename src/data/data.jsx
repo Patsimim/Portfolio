@@ -1,6 +1,7 @@
 import BuudlLogo from "../assets/image/Buudl.png";
 import SeniorAppLogo from "../assets/image/SeniorCare.png";
 import GlobalChatLogo from "../assets/image/GlobalChat.png";
+import SimpleNoteAppLogo from "../assets/image/SimpleNoteApp.png";
 
 export const portfolioData = {
   profile: {
@@ -82,6 +83,24 @@ export const portfolioData = {
           platform: "Github",
           url: "https://github.com/Patsimim/globalchatbackend/tree/master",
           label: "Github (Backend)",
+        },
+      ],
+    },
+    {
+      id: 4,
+      title: "Simple Note Pad",
+      date: "Aug. 2025",
+      category: "Mobile Development",
+      designer: "Russel Gem O Rojo",
+      description:
+        "Simple Note Pad is a lightweight, minimalistic application designed for quickly writing, editing, and organizing notes. It serves as a digital notepad for capturing thoughts, to-do lists, reminders, and ideas on the go.",
+      image: SimpleNoteAppLogo,
+      technologies: ["Originally developed React Native"],
+      viewLive: [
+        {
+          platform: "Github",
+          url: "https://github.com/Patsimim/SimpleNoteApp",
+          label: "Github",
         },
       ],
     },
