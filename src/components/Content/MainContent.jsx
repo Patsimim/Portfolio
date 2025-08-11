@@ -155,8 +155,8 @@ const MainContent = ({
               }}
             >
               Outside of work, I enjoy watching movies and anime, playing chess,
-              staying active with basketball and jogging, and reading comics
-              —activities that keep me both inspired and balanced.
+              staying active with basketball and jogging, and reading comics,
+              activities that keep me both inspired and balanced.
             </p>
           </div>
 

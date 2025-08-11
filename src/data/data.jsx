@@ -95,12 +95,17 @@ export const portfolioData = {
       description:
         "Simple Note Pad is a lightweight, minimalistic application designed for quickly writing, editing, and organizing notes. It serves as a digital notepad for capturing thoughts, to-do lists, reminders, and ideas on the go.",
       image: SimpleNoteAppLogo,
-      technologies: ["Originally developed React Native"],
+      technologies: ["React Native"],
       viewLive: [
         {
           platform: "Github",
           url: "https://github.com/Patsimim/SimpleNoteApp",
           label: "Github",
+        },
+        {
+          platform: "Expo: apk",
+          url: "https://expo.dev/artifacts/eas/ubKkyx16oS1jpwzP72NGLA.apk",
+          label: ".apk file",
         },
       ],
     },
