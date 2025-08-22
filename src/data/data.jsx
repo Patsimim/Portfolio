@@ -2,6 +2,7 @@ import BuudlLogo from "../assets/image/Buudl.png";
 import SeniorAppLogo from "../assets/image/SeniorCare.png";
 import GlobalChatLogo from "../assets/image/GlobalChat.png";
 import SimpleNoteAppLogo from "../assets/image/SimpleNoteApp.png";
+import SiquijorLogo from "../assets/image/Siquijor.png";
 
 export const portfolioData = {
   profile: {
@@ -106,6 +107,24 @@ export const portfolioData = {
           platform: "Expo: apk",
           url: "https://expo.dev/artifacts/eas/ubKkyx16oS1jpwzP72NGLA.apk",
           label: ".apk file",
+        },
+      ],
+    },
+    {
+      id: 5,
+      title: "Explore Siquijor",
+      date: "Aug. 2025",
+      category: "Web Development (Static)",
+      designer: "Russel Gem O Rojo",
+      description:
+        "Explore Siquijor is your travel companion to the Island of Fire. Discover the best beaches, waterfalls, caves, and local spots through an interactive map, reviews, and traveler photos. Whether you’re seeking hidden gems or planning your itinerary, Explore Siquijor helps you experience the island like a local.",
+      image: SiquijorLogo,
+      technologies: ["Vue3"],
+      viewLive: [
+        {
+          platform: "Website",
+          url: "https://coruscating-cupcake-984089.netlify.app/",
+          label: "Website",
         },
       ],
     },
